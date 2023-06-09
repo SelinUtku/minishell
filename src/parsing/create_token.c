@@ -1,31 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   doubly_ll.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/08 22:50:44 by sutku             #+#    #+#             */
-/*   Updated: 2023/06/09 04:47:11 by sutku            ###   ########.fr       */
+/*   Created: 2023/06/09 03:53:57 by sutku             #+#    #+#             */
+/*   Updated: 2023/06/09 04:41:51 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	main(int argc, char **argv, char **env)
+void	add_token_node(t_token **token, t_type type, int index, char *str)
 {
-	char	*input;
+	t_token	*new;
+	t_token	*last;
 
-	if (argc != 1)
+	new = malloc(sizeof(t_token));
+	if (!new)
+		return ;
+	new->type = type;
+	new->index = index;
+	new->str = str;
+	if (*token == NULL)
 	{
-		write (2, "Minishell does not take any arguments\n", 39);
-		return (1);
+		new->prev = NULL;
+		new->next = NULL;
+		*token = new;
 	}
 	else
 	{
-		input = readline("MinisHELL$ ");
-		printf ("%s", input);
-		free(input);
+		last = *token;
+		while (last->next != NULL)
+			last = last->next;
+		new->prev = last;
+		new->next = NULL;
+		last->next = new;
 	}
-	return (0);
 }

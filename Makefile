@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+         #
+#    By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/08 23:12:59 by Cutku             #+#    #+#              #
-#    Updated: 2023/06/09 01:35:32 by Cutku            ###   ########.fr        #
+#    Updated: 2023/06/09 04:44:35 by sutku            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ WHITE = \033[0;97m
 
 # USER		= $(shell whoami)
 
-MAIN_SRCS	= src/main/main.c
+MAIN_SRCS	= src/main/main.c src/parsing/create_token.c
 
 MAIN_OBJS	= $(MAIN_SRCS:.c=.o)
 
