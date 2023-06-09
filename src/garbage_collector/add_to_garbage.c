@@ -1,45 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   add_to_garbage.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/08 22:50:44 by sutku             #+#    #+#             */
-/*   Updated: 2023/06/09 03:10:43 by Cutku            ###   ########.fr       */
+/*   Created: 2023/06/09 04:43:29 by Cutku             #+#    #+#             */
+/*   Updated: 2023/06/09 04:43:48 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	main(int argc, char **argv, char **env)
+void	add_garbage(t_garbage **first, void *ptr)
 {
-	if (argc != 1)
+	t_garbage	*new;
+	t_garbage	*last;
+
+	new = (t_garbage *)malloc(sizeof(t_garbage));
+	if (!new)
 	{
-		write (2, "Minishell does not take any arguments\n", 39);
-		return (1);
+		perror("malloc fail");
+		exit (EXIT_FAILURE);
 	}
+	new->ptr = ptr;
+	new->next = NULL;
+	if (*first == NULL)
+		*first = new;
 	else
 	{
-		get_input();
-	}
-	return (0);
-}
-
-void	get_input(void)
-{
-	char	*input;
-
-	while (1)
-	{
-		input = readline("MinisHELL$ ");
-		if (input == NULL || input[0] == EOF \
-		|| ft_strncmp(input, "exit", 4) == 0)
-		{
-			free(input);
-			exit(EXIT_SUCCESS);
-		}
-		printf ("%s\n", input);
-		free(input);
+		last = *first;
+		while (last->next != NULL)
+			last = last->next;
+		last->next = new;
 	}
 }

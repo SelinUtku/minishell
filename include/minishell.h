@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 22:53:50 by sutku             #+#    #+#             */
-/*   Updated: 2023/06/09 00:04:12 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/06/09 03:18:41 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,14 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+typedef struct s_garbage
+{
+	void				*ptr;
+	int					size;
+	struct s_garbage	*next;
+
+}	t_garbage;
+
+void	get_input(void);
 
 #endif

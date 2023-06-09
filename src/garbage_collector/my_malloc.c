@@ -1,45 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   my_malloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/08 22:50:44 by sutku             #+#    #+#             */
-/*   Updated: 2023/06/09 03:10:43 by Cutku            ###   ########.fr       */
+/*   Created: 2023/06/09 03:17:22 by Cutku             #+#    #+#             */
+/*   Updated: 2023/06/09 04:44:31 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	main(int argc, char **argv, char **env)
+void	*my_malloc(t_garbage **garbage, size_t count, size_t size)
 {
-	if (argc != 1)
-	{
-		write (2, "Minishell does not take any arguments\n", 39);
-		return (1);
-	}
-	else
-	{
-		get_input();
-	}
-	return (0);
-}
+	void	*ptr;
 
-void	get_input(void)
-{
-	char	*input;
-
-	while (1)
+	if (count != 0 && ((size * count) / count != size))
 	{
-		input = readline("MinisHELL$ ");
-		if (input == NULL || input[0] == EOF \
-		|| ft_strncmp(input, "exit", 4) == 0)
-		{
-			free(input);
-			exit(EXIT_SUCCESS);
-		}
-		printf ("%s\n", input);
-		free(input);
+		perror("malloc fail");
+		clean_garbage(garbage);
+		exit (EXIT_FAILURE);
 	}
+	ptr = malloc(count * size);
+	if (!ptr)
+	{
+		perror("malloc fail");
+		clean_garbage(garbage);
+		exit (EXIT_FAILURE);
+	}
+	add_garbage(garbage, ptr);
+	return (ptr);
 }
