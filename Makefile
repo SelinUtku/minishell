@@ -6,7 +6,7 @@
 #    By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/08 23:12:59 by Cutku             #+#    #+#              #
-#    Updated: 2023/06/08 23:16:29 by Cutku            ###   ########.fr        #
+#    Updated: 2023/06/09 01:35:32 by Cutku            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,34 +21,42 @@ WHITE = \033[0;97m
 
 .SILENT:
 
-MAIN_SRCS	= main.c
+# USER		= $(shell whoami)
 
-MAIN_OBJS = $(MAIN_SRCS:.c=.o)
+MAIN_SRCS	= src/main/main.c
 
-LIBFT		= ./libft/
+MAIN_OBJS	= $(MAIN_SRCS:.c=.o)
+
+READLINE	= /Users/$(USER)/.brew/opt/readline/include/readline/readline/
+
+INCL_RDL_HEADER	= -I /Users/$(USER)/.brew/opt/readline/include/readline/readline/
+INCL_RDL_LIB	= -L /Users/$(USER)/.brew/opt/readline/lib -lreadline
+
+LIBFT		= -L ./libft
+LIBFT_FLAG	= -lft
 LIBFT_LIB	= ./libft/libft.a
 
 CC			= cc
 RM			= rm -f
-CFLAGS		= -Wall -Werror -Wextra
+CFLAGS		= #-Wall -Werror -Wextra
 
 NAME		= minishell
 
 all: $(NAME)
 
 $(LIBFT_LIB):
-	make bonus -C $(LIBFT) && make clean -C $(LIBFT)
+	make bonus -C ./libft && make clean -C ./libft
 	echo "$(GREEN)Libft compiled successfully!$(DEF_COLOR)"
 
-$(NAME): $(MAIN_OBJS) $(LIBFT_LIB)
-	$(CC) $(CFLAGS) $(MAIN_OBJS) $(LIBFT_LIB) -o $(NAME)
+$(NAME): $(LIBFT_LIB) $(MAIN_OBJS)
+	$(CC) $(CFLAGS) $(MAIN_OBJS) $(LIBFT) $(LIBFT_FLAG) $(INCL_RDL_LIB) -o $(NAME)
 	echo "$(GREEN)Minishell compiled successfully!$(DEF_COLOR)"
 
 clean:
 	$(RM) $(MAIN_OBJS)
 
 fclean: clean
-	make fclean -C $(LIBFT)
+	# make fclean -C $(LIBFT)
 	$(RM) $(NAME)
 
 re:	fclean all
