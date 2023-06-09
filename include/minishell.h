@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 22:53:50 by sutku             #+#    #+#             */
-/*   Updated: 2023/06/09 00:04:12 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/06/09 04:45:07 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # include <limits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "struct.h"
 
+void	add_token_node(t_token **token, t_type type, int index, char *str);
 
 #endif
