@@ -1,14 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/08 22:50:44 by sutku             #+#    #+#             */
-/*   Updated: 2023/06/09 03:10:43 by Cutku            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
 
 #include "../../include/minishell.h"
 
@@ -26,20 +16,39 @@ int	main(int argc, char **argv, char **env)
 	return (0);
 }
 
+void	print_token(t_token **token)
+{
+	t_token	*temp;
+
+	temp = *token;
+	while (temp)
+	{
+		printf("Token Type : %d ", temp->type);
+		printf("Token String : %s$\n", temp->str);
+		temp = temp->next;
+	}
+}
+
 void	get_input(void)
 {
 	char	*input;
+	char	*back_up;
+	t_token	*token;
 
+	token = NULL;
 	while (1)
 	{
 		input = readline("MinisHELL$ ");
+		back_up = input;
 		if (input == NULL || input[0] == EOF \
 		|| ft_strncmp(input, "exit", 4) == 0)
 		{
 			free(input);
 			exit(EXIT_SUCCESS);
 		}
-		printf ("%s\n", input);
-		free(input);
+		// examine_type(&token, &input);
+		split_pipes(&token, &input);
+		print_token(&token);
+		free(back_up);
 	}
 }
