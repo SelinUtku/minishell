@@ -1,19 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/08 22:53:50 by sutku             #+#    #+#             */
-/*   Updated: 2023/06/09 03:18:41 by Cutku            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include <stdbool.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
