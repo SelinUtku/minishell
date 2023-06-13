@@ -13,7 +13,8 @@ WHITE = \033[0;97m
 
 # USER		= $(shell whoami)
 
-MAIN_SRC	= src/main/main.c \
+MAIN_SRC	= src/main/main.c src/garbage_collector/add_to_garbage.c src/garbage_collector/del_from_garbage.c \
+			src/garbage_collector/my_malloc.c src/execution/priority.c src/execution/queue.c
 
 PARSE_SRC	= src/parsing/heredoc.c \
 				src/parsing/quote_check.c \
@@ -33,7 +34,7 @@ LIBFT_LIB	= ./libft/libft.a
 
 CC			= cc
 RM			= rm -f
-CFLAGS		= #-Wall -Werror -Wextra
+CFLAGS		= #-g #-Wall -Werror -Wextra
 
 NAME		= minishell
 
