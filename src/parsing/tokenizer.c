@@ -1,24 +1,24 @@
 #include "../../include/minishell.h"
 
-void	add_token_node(t_token **token, t_type type, char *str)
+void	add_token_node(t_shell *shell, t_type type, char *str)
 {
 	t_token	*new;
 	t_token	*last;
 
-	new = malloc(sizeof(t_token));
+	new = my_malloc(&shell->garbage, 1, sizeof(t_token));
 	if (!new)
 		return ;
 	new->type = type;
 	new->str = str;
-	if (*token == NULL)
+	if (shell->token == NULL)
 	{
 		new->prev = NULL;
 		new->next = NULL;
-		*token = new;
+		shell->token = new;
 	}
 	else
 	{
-		last = *token;
+		last = shell->token;
 		while (last->next != NULL)
 			last = last->next;
 		new->prev = last;
@@ -27,60 +27,87 @@ void	add_token_node(t_token **token, t_type type, char *str)
 	}
 }
 
-void	split_pipes(t_token **token, char **input)
-{
-	char	**splitted_input;
-	int		i;
 
-	splitted_input = ft_split(*input, '|');
-	i = 0;
-	while (splitted_input[i] != NULL)
+void	examine_type(t_shell *shell)
+{
+	while (shell->input[shell->i] != '\0')
 	{
-		examine_type(token, &splitted_input[i]);
-		i++;
-		if (splitted_input[i] != NULL)
-			add_token_node(token, PIPE, "|");
+		if (is_input_redirection(shell))
+			;
+		else if (is_output_redirection(shell))
+			;
+		else if (is_heredoc(shell))
+			;
+		else if (is_output_redirection_append(shell))
+			;
+		else if (is_pipe(shell))
+			;
+		else if (is_word(shell))
+			;
+		ft_isspace(shell);
 	}
 }
 
-void	examine_type(t_token **token, char **input)
+bool	is_pipe(t_shell *shell)
 {
-	while (*input[0] != '\0')
+	char	*str;
+
+	if (shell->input[shell->i] == '|')
 	{
-		if (ft_isspace(input))
-			;
-		else if (is_input_redirection(token, input))
-			;
-		else if (is_output_redirection(token, input))
-			;
-		else if (is_heredoc(token, input))
-			;
-		else if (is_output_redirection_append(token, input))
-			;
-		else
-			is_word(token, input);
-		// if (*input[0] != '\0')
-		// 	*input += 1;
-	}
-}
-
-bool	ft_isspace(char **str)
-{
-	int	i;
-
-	i = 0;
-	while ((*str)[i] == ' ' && (*str)[i] != '\0')
-		i++;
-	*str += i;
-	if (i != 0)
+		add_token_node(shell, PIPE, "|");
+		shell->i++;
 		return (true);
+	}
 	return (false);
 }
 
-void	is_word(t_token **token, char **input)
+void	ft_isspace(t_shell *shell)
 {
-	if ((*input)[0] == '\'' || (*input)[0] == '\"')
-		add_token_node(token, WORD, quoted_word(input));
-	else
-		add_token_node(token, WORD, non_quoted_word(input));
+	while (shell->input[shell->i] == ' ' && shell->input[shell->i] != '\0')
+		shell->i++;
+}
+
+bool	is_word(t_shell *shell)
+{
+	int		start;
+	char	*str;
+
+	if (ft_strchr(WORD_DELIMITERS, shell->input[shell->i]) == 0)
+	{
+		start = shell->i;
+		while (ft_strchr(WORD_DELIMITERS, shell->input[shell->i]) == 0)
+		{
+			if (shell->input[shell->i] == '\'')
+			{
+				shell->i++;
+				s_quote_state(shell);
+			}
+			else if (shell->input[shell->i] == '\"')
+			{
+				shell->i++;
+				d_quote_state(shell);
+			}
+			else
+				shell->i++;
+		}
+		str = ft_substr(shell->input, start, shell->i - start);
+		add_token_node(shell, WORD, str);
+		return (true);
+	}
+	return (false);
+}
+
+void	s_quote_state(t_shell *shell)
+{
+	while (shell->input[shell->i] != '\'' && shell->input[shell->i] != '\0')
+		shell->i++;
+	if (shell->input[shell->i] == '\'')
+		shell->i++;
+}
+void	d_quote_state(t_shell *shell)
+{
+	while (shell->input[shell->i] != '\"' && shell->input[shell->i] != '\0')
+		shell->i++;
+	if (shell->input[shell->i] == '\"')
+		shell->i++;
 }

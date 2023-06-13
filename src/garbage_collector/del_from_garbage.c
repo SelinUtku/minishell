@@ -38,13 +38,17 @@ void	clean_garbage(t_garbage **first)
 	{
 		del = *first;
 		*first = (*first)->next;
-		del_node(del);
+		// del_node(del);
+		free(del->ptr);
+		free(del);
+		del = NULL;
 	}
 }
 
 void	del_node(t_garbage *del)
 {
-	free(del->ptr);
+	if (del->ptr)
+		free(del->ptr);
 	free(del);
 	del = NULL;
 }

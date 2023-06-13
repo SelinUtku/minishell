@@ -22,14 +22,29 @@
 # include <readline/history.h>
 # include "struct.h"
 
-typedef struct s_garbage
-{
-	void				*ptr;
-	int					size;
-	struct s_garbage	*next;
+//garbage_collector
+void	*my_malloc(t_garbage **garbage, size_t count, size_t size);
+void	add_garbage(t_garbage **first, void *ptr);
+void	del_one_from_garbage(t_garbage **first, void *ptr);
+void	clean_garbage(t_garbage **first);
+void	del_node(t_garbage *del);
 
-}	t_garbage;
-
+//Parsing
+void	ft_isspace(t_shell *shell);
+bool	is_output_redirection(t_shell *shell);
+bool	is_input_redirection(t_shell *shell);
+char	*quoted_word(t_shell *shell);
+char	*non_quoted_word(t_shell *shell);
+void	examine_type(t_shell *shell);
+void	add_token_node(t_shell *shell, t_type type, char *str);
+bool	is_word(t_shell *shell);
+bool	is_heredoc(t_shell *shell);
+bool	is_output_redirection_append(t_shell *shell);
+bool	is_pipe(t_shell *shell);
+//main
 void	get_input(void);
+
+void	s_quote_state(t_shell *shell);
+void	d_quote_state(t_shell *shell);
 
 #endif
