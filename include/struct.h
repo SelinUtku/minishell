@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   struct.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
+/*   Updated: 2023/06/29 03:09:26 by Cutku            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 
 
 #ifndef STRUCT_H
@@ -40,14 +52,22 @@ typedef struct s_queue
 	struct s_queue	*next;
 }	t_queue;
 
+typedef struct s_queue_exp
+{
+	char			*str;
+	struct s_queue_exp	*next;
+}	t_queue_exp;
+
 typedef struct s_shell
 {
 	int			i;
 	char		*input;
+	char		**my_env;
 	t_garbage	*garbage;
 	t_token		*token;
 	t_queue		*front;
 	t_queue		*rear;
+	t_queue_exp	*exp_queue;
 }t_shell;
 
 

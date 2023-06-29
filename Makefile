@@ -14,12 +14,16 @@ WHITE = \033[0;97m
 # USER		= $(shell whoami)
 
 MAIN_SRC	= src/main/main.c src/garbage_collector/add_to_garbage.c src/garbage_collector/del_from_garbage.c \
-			src/garbage_collector/my_malloc.c src/execution/priority.c src/execution/queue.c
+			src/garbage_collector/my_malloc.c src/execution/priority.c src/execution/queue.c help_function.c \
+			src/expansion/expand.c src/expansion/expansion_queue.c src/expansion/merge_queue.c
 
 PARSE_SRC	= src/parsing/heredoc.c \
 				src/parsing/quote_check.c \
 				src/parsing/redirections.c \
 				src/parsing/tokenizer.c
+
+BUILTIN_SRC	= src/builtins/cd.c src/builtins/env.c src/builtins/exit.c src/builtins/export.c src/builtins/unset.c
+BUILTIN_OBJ	= $(BUILTIN_SRC:.c=.o)
 
 MAIN_OBJ	= $(MAIN_SRC:.c=.o)
 PARSE_OBJ	= $(PARSE_SRC:.c=.o)
@@ -34,7 +38,7 @@ LIBFT_LIB	= ./libft/libft.a
 
 CC			= cc
 RM			= rm -f
-CFLAGS		= #-g #-Wall -Werror -Wextra
+CFLAGS		= -g #-Wall -Werror -Wextra
 
 NAME		= minishell
 
@@ -44,13 +48,14 @@ $(LIBFT_LIB):
 	make bonus -C $(LIBFT) && make clean -C $(LIBFT)
 	echo "$(GREEN)Libft compiled successfully!$(DEF_COLOR)"
 
-$(NAME): $(LIBFT_LIB) $(MAIN_OBJ) $(PARSE_OBJ)
-	$(CC) $(CFLAGS) $(PARSE_OBJ) $(MAIN_OBJ) $(LIBFT_LIB) $(INCL_RDL_LIB) -o $(NAME)
+$(NAME): $(LIBFT_LIB) $(MAIN_OBJ) $(PARSE_OBJ) $(BUILTIN_OBJ)
+	$(CC) $(CFLAGS) $(PARSE_OBJ) $(BUILTIN_OBJ) $(MAIN_OBJ) $(LIBFT_LIB) $(INCL_RDL_LIB) -o $(NAME)
 	echo "$(GREEN)Minishell compiled successfully!$(DEF_COLOR)"
 
 clean:
 	$(RM) $(MAIN_OBJ) 
 	$(RM) $(PARSE_OBJ)
+	$(RM) $(BUILTIN_OBJ)
 
 fclean: clean
 	make fclean -C $(LIBFT)

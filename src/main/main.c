@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
+/*   Updated: 2023/06/29 05:28:44 by Cutku            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -11,7 +21,7 @@ int	main(int argc, char **argv, char **env)
 	}
 	else
 	{
-		get_input();
+		get_input(env);
 	}
 	return (0);
 }
@@ -48,7 +58,7 @@ void	leaks(void)
 	system("leaks minishell");
 }
 
-void	get_input(void)
+void	get_input(char **env)
 {
 	char	*input;
 	char	*back_up;
@@ -57,20 +67,24 @@ void	get_input(void)
 	// atexit(&leaks);
 	shell = malloc(sizeof(t_shell));
 	shell->i = 0;
+	create_env(shell, env);
 	while (1)
 	{
 		shell->token = NULL;
 		shell->garbage = NULL;
 		shell->input = readline("MinisHELL$ ");
-		if (shell->input == NULL || shell->input[0] == EOF \
-		|| ft_strncmp(shell->input, "exit", 4) == 0)
-		{
-			free(shell->input);
-			exit(EXIT_SUCCESS);
-		}
+		// ft_cd(shell, shell->input);
+		// ft_env(shell);
+		// printf("\n\n\n");
+		// delete_env_var(shell, "data");
+		// ft_env(shell);
+		// if (ft_strncmp(shell->input, "cd", 2) == 0)
+		// 	printf("%s\n", value_of_expandable(shell, shell->input + 3));
+		ft_exit(shell);
 		add_history(shell->input);
 		examine_type(shell);
 		print_token(shell->token);
+		is_expandable(shell);
 		exec_order(shell);
 		print_order(&shell->front);
 		free(shell->input);

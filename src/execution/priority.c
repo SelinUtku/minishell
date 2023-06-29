@@ -73,7 +73,7 @@ bool	is_syntax_error(t_shell *shell, t_token *token)
 		if (token->next == NULL || token->next->type != 7)
 		{
 			if (token->next != NULL)
-				printf("syntax error near unexpected token '%s'\n", token->next->str);
+				printf("syntax error near unexpected token '%c'\n", token->next->str[0]);
 			else
 				printf("syntax error near unexpected token 'newline'\n");
 			return (true);
