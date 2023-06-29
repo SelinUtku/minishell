@@ -42,9 +42,32 @@ bool	is_heredoc(t_shell *shell);
 bool	is_output_redirection_append(t_shell *shell);
 bool	is_pipe(t_shell *shell);
 //main
-void	get_input(void);
+void	get_input(char **env);
 
 void	s_quote_state(t_shell *shell);
 void	d_quote_state(t_shell *shell);
 
+//builtins
+
+void	create_env(t_shell *shell, char **env);
+void	ft_env(t_shell *shell);
+int		ft_getenv(char **str, char *var);
+char	*value_of_expandable(t_shell *shell, char *var);
+void	ft_pwd(void);
+void	ft_cd(t_shell *shell, char *path);
+void	ft_exit(t_shell *shell);
+void	update_oldpwd(t_shell *shell);
+void	ft_export(t_shell *shell, char *var, char *value);
+void	update_env_var(t_shell *shell, char *var, char *value);
+void	create_env_var(t_shell *shell, char *var, char *value);
+void	append_env_var(t_shell *shell, char *var, char *value);
+void	delete_env_var(t_shell *shell, char *var);
+
+// expansion
+void	is_expandable(t_shell *shell);
+void	exp_enqueue(t_queue_exp **front, t_queue_exp **rear, char *ptr);
+void	exp_dequeue(t_queue_exp **front);
+char	*merge_queue(t_shell *shell, t_queue_exp **temp_front, t_queue_exp **temp_rear);
+//helping functions
+int		ft_double_strlen(char **str);
 #endif
