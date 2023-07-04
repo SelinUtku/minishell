@@ -15,7 +15,7 @@ WHITE = \033[0;97m
 
 MAIN_SRC	= src/main/main.c src/garbage_collector/add_to_garbage.c src/garbage_collector/del_from_garbage.c \
 			src/garbage_collector/my_malloc.c src/execution/priority.c src/execution/queue.c help_function.c \
-			src/expansion/expand.c src/expansion/expansion_queue.c src/expansion/merge_queue.c
+			src/expansion/expand.c src/expansion/merge_queue.c
 
 PARSE_SRC	= src/parsing/heredoc.c \
 				src/parsing/quote_check.c \

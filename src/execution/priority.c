@@ -1,13 +1,10 @@
 #include "../../include/minishell.h"
 
-
 void	exec_order(t_shell *shell)
 {
 	t_token	*temp;
 
 	temp = shell->token;
-	shell->front = NULL;
-	shell->rear = NULL;
 	if (order_heredoc(shell, temp) == false)
 		return ;
 	while (temp)
@@ -73,7 +70,7 @@ bool	is_syntax_error(t_shell *shell, t_token *token)
 		if (token->next == NULL || token->next->type != 7)
 		{
 			if (token->next != NULL)
-				printf("syntax error near unexpected token '%c'\n", token->next->str[0]);
+				printf("syntax error near unexpected token '%s'\n", token->next->str);
 			else
 				printf("syntax error near unexpected token 'newline'\n");
 			return (true);
@@ -81,20 +78,3 @@ bool	is_syntax_error(t_shell *shell, t_token *token)
 	}
 	return (false);
 }
-
-// void	here_doc(char *delimiter)
-// {
-// 	char *line;
-// 	line = readline("> ");
-// 	if (line == NULL || line[0] == EOF || \
-// 	ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0
-// 	&& ft_strlen(line) == ft_strlen(delimiter))
-// 	{
-// 		free(line);
-// 		return ;
-// 	}
-// 	else
-// 	{
-// 		write()
-// 	}
-// }

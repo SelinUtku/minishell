@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/06/29 05:28:44 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/04 23:47:16 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,27 @@ void	print_order(t_queue **front)
 
 	temp = *front;
 	printf("EXEC ORDER\n");
-	while (temp && temp->token)
+	while (temp && temp->content)
 	{
-		printf("Token Type : %d ", temp->token->type);
-		printf("Token String : %s$\n", temp->token->str);
+		printf("Token Type : %d ", ((t_token *)temp->content)->type);
+		printf("Token String : %s\n", ((t_token *)temp->content)->str);
 		temp = temp->next;
 	}
 }
 void	leaks(void)
 {
 	system("leaks minishell");
+}
+
+void	init_shell_struct(t_shell *shell)
+{
+	shell->i = 0;
+	shell->token = NULL;
+	shell->garbage = NULL;
+	shell->front = NULL;
+	shell->rear = NULL;
+	shell->exp_front = NULL;
+	shell->exp_rear = NULL;
 }
 
 void	get_input(char **env)
@@ -66,20 +77,12 @@ void	get_input(char **env)
 
 	// atexit(&leaks);
 	shell = malloc(sizeof(t_shell));
-	shell->i = 0;
+	init_shell_struct(shell);
 	create_env(shell, env);
 	while (1)
 	{
-		shell->token = NULL;
-		shell->garbage = NULL;
+		init_shell_struct(shell);
 		shell->input = readline("MinisHELL$ ");
-		// ft_cd(shell, shell->input);
-		// ft_env(shell);
-		// printf("\n\n\n");
-		// delete_env_var(shell, "data");
-		// ft_env(shell);
-		// if (ft_strncmp(shell->input, "cd", 2) == 0)
-		// 	printf("%s\n", value_of_expandable(shell, shell->input + 3));
 		ft_exit(shell);
 		add_history(shell->input);
 		examine_type(shell);
@@ -89,6 +92,6 @@ void	get_input(char **env)
 		print_order(&shell->front);
 		free(shell->input);
 		clean_garbage(&shell->garbage);
-		shell->i = 0;
 	}
 }
+
