@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-void	enqueue(t_queue **front, t_queue **rear, t_token *ptr)
+void	enqueue(t_queue **front, t_queue **rear, void *ptr)
 {
 	t_queue	*new;
 
@@ -11,7 +11,7 @@ void	enqueue(t_queue **front, t_queue **rear, t_token *ptr)
 		perror ("malloc");
 		exit (EXIT_FAILURE);
 	}
-	new->token = ptr;
+	new->content = ptr;
 	new->next = NULL;
 	if (*front == NULL)
 	{

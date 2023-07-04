@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/06/29 03:09:26 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/04 22:31:35 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,15 @@ typedef struct s_token
 
 typedef struct s_queue
 {
-	t_token			*token;
+	void			*content;
 	struct s_queue	*next;
 }	t_queue;
 
-typedef struct s_queue_exp
-{
-	char			*str;
-	struct s_queue_exp	*next;
-}	t_queue_exp;
+// typedef struct s_queue_exp
+// {
+// 	char				*str;
+// 	struct s_queue_exp	*next;
+// }	t_queue_exp;
 
 typedef struct s_shell
 {
@@ -67,11 +67,13 @@ typedef struct s_shell
 	t_token		*token;
 	t_queue		*front;
 	t_queue		*rear;
-	t_queue_exp	*exp_queue;
+	t_queue		*exp_front;
+	t_queue		*exp_rear;
+
 }t_shell;
 
 
-void	enqueue(t_queue **front, t_queue **rear, t_token *ptr);
+void	enqueue(t_queue **front, t_queue **rear, void *ptr);
 void	dequeue(t_queue **front);
 void	exec_order(t_shell *shell);
 bool	order_heredoc(t_shell *shell, t_token *token);

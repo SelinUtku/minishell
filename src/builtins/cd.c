@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 02:04:07 by Cutku             #+#    #+#             */
-/*   Updated: 2023/06/26 04:01:38 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/02 20:51:47 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	ft_cd(t_shell *shell, char *path)
 	char	*str;
 
 	update_oldpwd(shell);
-	if (!path || !*path)// belki sadece yildizli tutmamiz gerekir
+	if (!path || !*path)// belki sadece yildizli tutmamiz gerekir	
 	{
 		str = getenv("HOME=");
 		if (!str)

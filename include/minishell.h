@@ -65,9 +65,7 @@ void	delete_env_var(t_shell *shell, char *var);
 
 // expansion
 void	is_expandable(t_shell *shell);
-void	exp_enqueue(t_queue_exp **front, t_queue_exp **rear, char *ptr);
-void	exp_dequeue(t_queue_exp **front);
-char	*merge_queue(t_shell *shell, t_queue_exp **temp_front, t_queue_exp **temp_rear);
+void	merge_queue(t_shell *shell, t_token *token);
 //helping functions
 int		ft_double_strlen(char **str);
 #endif
