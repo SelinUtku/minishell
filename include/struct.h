@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/04 22:31:35 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/10 02:45:17 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ typedef struct s_garbage
 {
 	void				*ptr;
 	struct s_garbage	*next;
-
 }	t_garbage;
 
 typedef enum e_type
@@ -52,25 +51,32 @@ typedef struct s_queue
 	struct s_queue	*next;
 }	t_queue;
 
-// typedef struct s_queue_exp
-// {
-// 	char				*str;
-// 	struct s_queue_exp	*next;
-// }	t_queue_exp;
+typedef struct s_pipex
+{
+	pid_t	*pid;
+	char	**command;
+	char	**all_paths;
+	int		**pipeline;
+	char	**envp;
+	char	*cmd_path;
+	char	*infile;
+	int		heredoc;
+	int		num_commands;
+}	t_pipex;
 
 typedef struct s_shell
 {
 	int			i;
 	char		*input;
 	char		**my_env;
+	char		**builtins;
 	t_garbage	*garbage;
 	t_token		*token;
 	t_queue		*front;
 	t_queue		*rear;
 	t_queue		*exp_front;
 	t_queue		*exp_rear;
-
-}t_shell;
+}	t_shell;
 
 
 void	enqueue(t_queue **front, t_queue **rear, void *ptr);

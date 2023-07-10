@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/04 23:47:16 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/10 02:47:27 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,12 @@ void	print_order(t_queue **front)
 
 	temp = *front;
 	printf("EXEC ORDER\n");
-	while (temp && temp->content)
+	while (*front && (*front)->content)
 	{
-		printf("Token Type : %d ", ((t_token *)temp->content)->type);
-		printf("Token String : %s\n", ((t_token *)temp->content)->str);
-		temp = temp->next;
+		printf("Token Type : %d ", ((t_token *)(*front)->content)->type);
+		printf("Token String : %s\n", ((t_token *)(*front)->content)->str);
+		dequeue(front);
+		// temp = temp->next;
 	}
 }
 void	leaks(void)
@@ -62,7 +63,6 @@ void	init_shell_struct(t_shell *shell)
 {
 	shell->i = 0;
 	shell->token = NULL;
-	shell->garbage = NULL;
 	shell->front = NULL;
 	shell->rear = NULL;
 	shell->exp_front = NULL;
@@ -77,6 +77,9 @@ void	get_input(char **env)
 
 	// atexit(&leaks);
 	shell = malloc(sizeof(t_shell));
+	if (!shell)
+		return ;
+	shell->garbage = NULL;
 	init_shell_struct(shell);
 	create_env(shell, env);
 	while (1)
@@ -86,12 +89,13 @@ void	get_input(char **env)
 		ft_exit(shell);
 		add_history(shell->input);
 		examine_type(shell);
-		print_token(shell->token);
-		is_expandable(shell);
+		// print_token(shell->token);
 		exec_order(shell);
+		is_expandable(shell);
 		print_order(&shell->front);
+		// pipex(shell, shell->my_env);
+		print_token(shell->token);
 		free(shell->input);
-		clean_garbage(&shell->garbage);
 	}
 }
 

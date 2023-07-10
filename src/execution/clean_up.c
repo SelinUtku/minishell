@@ -1,25 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/19 03:14:28 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/06 05:10:21 by Cutku            ###   ########.fr       */
+/*   Created: 2023/04/16 05:00:38 by Cutku             #+#    #+#             */
+/*   Updated: 2023/07/08 06:16:04 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_exit(t_shell *shell)
+void	close_pipes(t_pipex *pipex)
 {
-	if (shell->input == NULL || shell->input[0] == EOF || \
-	(ft_strncmp(shell->input, "exit", 4) == 0 && ft_strlen(shell->input) == 4))
+	int	i;
+
+	i = -1;
+	while (++i < pipex->num_commands - 1)
 	{
-		free(shell->input);
-		clean_garbage(&shell->garbage);
-		free(shell);
-		exit(EXIT_SUCCESS);
+		close(pipex->pipeline[i][0]);
+		close(pipex->pipeline[i][1]);
 	}
+}
+
+void	free_char_dubleptr(char **ptr)
+{
+	int	i;
+
+	i = -1;
+	while (ptr[++i] != NULL)
+		free(ptr[i]);
+	free(ptr);
+}
+
+void	free_int_dubleptr(int **ptr, int size)
+{
+	int	i;
+
+	i = -1;
+	while (++i < size)
+		free(ptr[i]);
+	free(ptr);
 }
