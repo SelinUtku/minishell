@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 03:55:30 by Cutku             #+#    #+#             */
-/*   Updated: 2023/06/26 04:55:12 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/07 22:09:37 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,19 @@ void	delete_env_var(t_shell *shell, char *var)
 	index_var = ft_getenv(temp, var);
 	if (index_var != -1)
 	{
-		shell->my_env = malloc((i) * sizeof(char *));
+		shell->my_env = my_malloc(&shell->garbage, i, sizeof(char *));
 		i = 0;
 		j = 0;
-		while ((temp) && temp[i])
+		while (temp && temp[i])
 		{
 			if (i != index_var)
-				shell->my_env[j] = ft_strdup(temp[i]);
+				shell->my_env[j] = shell_strdup(shell, temp[i]);
 			else
 				j--;
 			i++;
 			j++;
 		}
 		shell->my_env[j] = NULL;
-		free(temp);
+		// free(temp); double del one free
 	}
 }

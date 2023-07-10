@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/19 03:14:28 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/06 05:10:21 by Cutku            ###   ########.fr       */
+/*   Created: 2023/07/10 02:29:53 by Cutku             #+#    #+#             */
+/*   Updated: 2023/07/10 02:42:06 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_exit(t_shell *shell)
+void	is_builtin(t_token *token)
 {
-	if (shell->input == NULL || shell->input[0] == EOF || \
-	(ft_strncmp(shell->input, "exit", 4) == 0 && ft_strlen(shell->input) == 4))
+	int	i;
+
+	while (token && token->type != PIPE)
 	{
-		free(shell->input);
-		clean_garbage(&shell->garbage);
-		free(shell);
-		exit(EXIT_SUCCESS);
+		if (token->type = WORD)
+		{
+			ft_strncmp
+		}
 	}
 }

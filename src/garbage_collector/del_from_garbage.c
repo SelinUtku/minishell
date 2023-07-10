@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   del_from_garbage.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/06 04:47:09 by Cutku             #+#    #+#             */
+/*   Updated: 2023/07/06 04:47:47 by Cutku            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -38,10 +48,7 @@ void	clean_garbage(t_garbage **first)
 	{
 		del = *first;
 		*first = (*first)->next;
-		// del_node(del);
-		free(del->ptr);
-		free(del);
-		del = NULL;
+		del_node(del);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:25:09 by Cutku             #+#    #+#             */
-/*   Updated: 2023/06/26 01:38:39 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/06 00:37:25 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,19 @@ void	create_env(t_shell *shell, char **env)
 	index_var = ft_getenv(env, "OLDPWD");
 	if (index_var != -1)
 		i--;
-	shell->my_env = malloc((i + 1) * sizeof(char *));
+	shell->my_env = my_malloc(&shell->garbage, (i + 1), sizeof(char *));
 	i = 0;
 	j = 0;
 	while (env && env[i])
 	{
 		if (i != index_var)
-			shell->my_env[j] = ft_strdup(env[i]);
+			shell->my_env[j] = shell_strdup(shell, env[i]);
 		else
 			j--;
 		i++;
 		j++;
 	}
 	shell->my_env[j] = NULL;
-	// ft_env(shell);
 }
 
 int	ft_getenv(char **str, char *var)
@@ -45,7 +44,8 @@ int	ft_getenv(char **str, char *var)
 	i = 0;
 	while (str && var && str[i])
 	{
-		if (ft_strncmp(str[i], var, ft_strlen(var)) == 0)
+		if (ft_strncmp(str[i], var, ft_strlen(var)) == 0 && \
+		(ft_strchr(str[i], '=') - str[i]) == ft_strlen(var))
 			return (i);
 		i++;
 	}
@@ -63,7 +63,7 @@ char	*value_of_expandable(t_shell *shell, char *var)
 		str = shell->my_env[i];
 		if (str)
 		{
-			str = ft_strdup(&str[ft_strlen(var) + 1]);
+			str = shell_strdup(shell, &str[ft_strlen(var) + 1]);
 			return (str);
 		}
 	}

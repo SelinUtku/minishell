@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/05 23:23:52 by Cutku             #+#    #+#             */
+/*   Updated: 2023/07/06 04:35:37 by Cutku            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../include/minishell.h"
 
 void	add_token_node(t_shell *shell, t_type type, char *str)
@@ -6,8 +18,6 @@ void	add_token_node(t_shell *shell, t_type type, char *str)
 	t_token	*last;
 
 	new = my_malloc(&shell->garbage, 1, sizeof(t_token));
-	if (!new)
-		return ;
 	new->type = type;
 	new->str = str;
 	if (shell->token == NULL)
@@ -26,7 +36,6 @@ void	add_token_node(t_shell *shell, t_type type, char *str)
 		last->next = new;
 	}
 }
-
 
 void	examine_type(t_shell *shell)
 {
@@ -50,11 +59,9 @@ void	examine_type(t_shell *shell)
 
 bool	is_pipe(t_shell *shell)
 {
-	char	*str;
-
 	if (shell->input[shell->i] == '|')
 	{
-		add_token_node(shell, PIPE, "|");
+		add_token_node(shell, PIPE, shell_strdup(shell, "|"));
 		shell->i++;
 		return (true);
 	}
@@ -78,19 +85,13 @@ bool	is_word(t_shell *shell)
 		while (ft_strchr(WORD_DELIMITERS, shell->input[shell->i]) == 0)
 		{
 			if (shell->input[shell->i] == '\'')
-			{
-				shell->i++;
 				s_quote_state(shell);
-			}
 			else if (shell->input[shell->i] == '\"')
-			{
-				shell->i++;
 				d_quote_state(shell);
-			}
 			else
 				shell->i++;
 		}
-		str = ft_substr(shell->input, start, shell->i - start);
+		str = shell_substr(shell, shell->input, start, shell->i - start);
 		add_token_node(shell, WORD, str);
 		return (true);
 	}
@@ -99,13 +100,16 @@ bool	is_word(t_shell *shell)
 
 void	s_quote_state(t_shell *shell)
 {
+	shell->i++;
 	while (shell->input[shell->i] != '\'' && shell->input[shell->i] != '\0')
 		shell->i++;
 	if (shell->input[shell->i] == '\'')
 		shell->i++;
 }
+
 void	d_quote_state(t_shell *shell)
 {
+	shell->i++;
 	while (shell->input[shell->i] != '\"' && shell->input[shell->i] != '\0')
 		shell->i++;
 	if (shell->input[shell->i] == '\"')

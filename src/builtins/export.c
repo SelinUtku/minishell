@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:37:42 by Cutku             #+#    #+#             */
-/*   Updated: 2023/06/26 03:56:50 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/06 05:19:28 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,8 @@ void	update_env_var(t_shell *shell, char *var, char *value)
 	if (index != -1)
 	{
 		temp = shell->my_env[index];
-		shell->my_env[index] = ft_strjoin(var, value);
-		free(temp);
-		// free(var);
-		// free(value);Parsingden kaynakli linked listte olabilirler orada da free atilabilir.
+		shell->my_env[index] = shell_strjoin(shell, var, value);
+		del_one_from_garbage(&shell->garbage, temp);
 	}
 }
 
@@ -37,27 +35,40 @@ void	append_env_var(t_shell *shell, char *var, char *value)//export +=
 	if (index != -1)
 	{
 		temp = shell->my_env[index];
-		shell->my_env[index] = ft_strjoin(shell->my_env[index], value);
-		free(temp);
-		// free(var);
-		// free(value);Parsingden kaynakli linked listte olabilirler orada da free atilabilir.
+		shell->my_env[index] = shell_strjoin(shell, shell->my_env[index], value);
+		del_one_from_garbage(&shell->garbage, temp);
 	}
 }
 
-void	create_env_var(t_shell *shell, char *var, char *value)//export
+void	add_env_var(t_shell *shell, char *var, char *value)//export
 {
 	char	**temp;
 	int		i;
 
 	temp = shell->my_env;
-	shell->my_env = malloc((ft_double_strlen(temp) + 2) * sizeof(char *));
+	shell->my_env = my_malloc(&shell->garbage, \
+	(ft_double_strlen(temp) + 2), sizeof(char *));
 	i = 0;
 	while (temp && temp[i])
 	{
 		shell->my_env[i] = temp[i];
 		i++;
 	}
-	shell->my_env[i] = ft_strjoin(var, value);
+	shell->my_env[i] = shell_strjoin(shell, var, value);
 	shell->my_env[i + 1] = NULL;
-	free(temp);
+	free_double_from_garbage(&shell->garbage, temp);
+	// free(temp); // del one double pointer
+}
+
+void	free_double_from_garbage(t_garbage **garbage, char **ptr)
+{
+	int	i;
+
+	i = 0;
+	while (ptr[i] != NULL)
+	{
+		del_one_from_garbage(garbage, ptr[i]);
+		i++;
+	}
+	del_one_from_garbage(garbage, ptr);//?
 }
