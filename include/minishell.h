@@ -52,7 +52,7 @@ void	d_quote_state(t_shell *shell);
 //builtins
 
 void	create_env(t_shell *shell, char **env);
-void	ft_env(t_shell *shell);
+void	ft_env(t_shell *shell, char **str);
 int		ft_getenv(char **str, char *var);
 char	*value_of_expandable(t_shell *shell, char *var);
 void	ft_pwd(void);
@@ -79,7 +79,7 @@ int	pipe_counter(t_shell *shell);
 t_token	*find_right_token(t_shell *shell, int num_pipe);
 void	handle_redirections(t_shell *shell, t_token *child, t_pipex *pipex);
 void	exec_child_process(t_shell *shell,t_pipex *pipex, int i);
-void	command_pointer(t_token *child, t_pipex *pipex);
+char	**command_pointer(t_token *child);
 void	create_child_process(t_shell *shell, t_pipex *pipex);
 
 // Main process. File > pipex.c
@@ -106,4 +106,8 @@ void	close_pipes(t_pipex *pipex);
 void	free_pipex(t_pipex *pipex);
 void	input_dup2(int input);
 void	output_dup2(int output);
+int		which_builtin(t_shell *shell, char **str);
+void	ft_echo(t_shell *shell, char **str);
+void	exec_builtin(t_shell *shell, char **str, t_pipex *pipex);
+int		is_builtin(char *str);
 #endif

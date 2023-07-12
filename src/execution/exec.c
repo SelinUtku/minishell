@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 02:25:13 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/09 20:43:59 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/13 00:36:05 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	pipe_counter(t_shell *shell)
 {
-	t_token *temp;
+	t_token	*temp;
 	int		i;
 
 	temp = shell->token;
@@ -35,7 +35,7 @@ void	pipex(t_shell *shell, char **envp)
 
 	number_of_pipes = pipe_counter(shell);
 	pipex = (t_pipex *)malloc(sizeof(t_pipex));
-	pipex->num_commands = number_of_pipes + 1;
+	pipex->num_commands = shell->num_pipe + 1;
 	pipex->envp = shell->my_env;
 	create_pipelines(pipex, pipex->num_commands - 1);
 	create_child_process(shell, pipex);
@@ -106,7 +106,7 @@ t_token	*find_right_token(t_shell *shell, int num_pipe)
 	i = 0;
 	while (temp && i < num_pipe)
 	{
-		if (temp->type == 6)
+		if (temp->type == PIPE)
 			i++;
 		temp = temp->next;
 	}
@@ -164,7 +164,9 @@ void	exec_child_process(t_shell *shell,t_pipex *pipex, int i)
 			}
 		}
 		handle_redirections(shell, child, pipex);
-		command_pointer(child, pipex);
+		pipex->command = command_pointer(child);
+		if (is_builtin(pipex->command[0]))
+			exec_builtin(shell, pipex->command, pipex);
 		close_pipes(pipex);
 		execve(get_command_path(pipex), pipex->command, pipex->envp);
 		clean_garbage(&shell->garbage);
@@ -173,9 +175,10 @@ void	exec_child_process(t_shell *shell,t_pipex *pipex, int i)
 	}
 }
 
-void	command_pointer(t_token *child, t_pipex *pipex)
+char	**command_pointer(t_token *child)
 {
 	t_token	*temp;
+	char	**str;
 	int		i;
 
 	temp = child;
@@ -187,23 +190,24 @@ void	command_pointer(t_token *child, t_pipex *pipex)
 		temp = temp->next;
 	}
 	temp = child;
-	pipex->command = malloc((i + 1) * sizeof(char *));
+	str = malloc((i + 1) * sizeof(char *));
 	i = 0;
 	while (temp && temp->type != 6)
 	{
 		if (temp->type == WORD)
 		{
-			pipex->command[i] = ft_strdup(temp->str);
+			str[i] = temp->str;
 			i++;
 		}
 		temp = temp->next;
 	}
-	pipex->command[i] = NULL;
+	str[i] = NULL;
+	return (str);
 }
 
 void	free_pipex(t_pipex *pipex)
 {
 	free(pipex->pid);
 	free_int_dubleptr(pipex->pipeline, pipex->num_commands - 1);
-	free_char_dubleptr(pipex->command);
+	// free_char_dubleptr(pipex->command);
 }

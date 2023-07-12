@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/10 02:45:17 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/12 03:18:31 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ typedef struct s_pipex
 typedef struct s_shell
 {
 	int			i;
+	int			num_pipe;
 	char		*input;
 	char		**my_env;
-	char		**builtins;
 	t_garbage	*garbage;
 	t_token		*token;
 	t_queue		*front;

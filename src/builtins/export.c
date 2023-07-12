@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:37:42 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/06 05:19:28 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/12 06:15:35 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@ void	update_env_var(t_shell *shell, char *var, char *value)
 	if (index != -1)
 	{
 		temp = shell->my_env[index];
+		shell->my_env[index] = shell_strjoin(shell, var, "=");
+		// del_one_from_garbage(&shell->garbage, temp);
+		temp = shell->my_env[index];
 		shell->my_env[index] = shell_strjoin(shell, var, value);
-		del_one_from_garbage(&shell->garbage, temp);
+		// del_one_from_garbage(&shell->garbage, temp);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 02:41:30 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/09 18:45:10 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/12 03:36:33 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ void	d_quote_expand(t_shell *shell, char *str, int *i)
 
 	(*i)++;
 	start = *i;
+	if (str[*i] == '\"')
+		enqueue(&shell->exp_front, &shell->exp_rear, \
+		shell_substr(shell, str, start, *i - start));
 	while (str[*i] != '\"' && str[*i] != '\0')
 	{
 		if (str[*i] == '$')
@@ -125,6 +128,6 @@ void	is_expandable(t_shell *shell)
 			}
 			merge_queue(shell, temp_token);
 		}
-		temp_token = temp_token->next; 
+		temp_token = temp_token->next;
 	}
 }

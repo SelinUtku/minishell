@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/10 02:47:27 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/13 00:49:24 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,22 @@ void	get_input(char **env)
 		ft_exit(shell);
 		add_history(shell->input);
 		examine_type(shell);
-		// print_token(shell->token);
-		exec_order(shell);
-		is_expandable(shell);
-		print_order(&shell->front);
-		// pipex(shell, shell->my_env);
 		print_token(shell->token);
+		exec_order(shell);
+		print_order(&shell->front);
+		// is_expandable(shell);
+		// shell->num_pipe = pipe_counter(shell);
+		// if (shell->num_pipe == 0)
+		// {
+		// 	char **str = command_pointer(shell->front);
+		// 	if (is_builtin(*str))
+		// 		which_builtin(shell, str);
+		// 	else
+		// 		pipex(shell, shell->my_env);
+		// }
+		// else
+		// 	pipex(shell, shell->my_env);
+		// print_token(shell->token);
 		free(shell->input);
 	}
 }
-
