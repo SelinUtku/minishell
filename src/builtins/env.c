@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:25:09 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/06 00:37:25 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/12 06:01:03 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	ft_getenv(char **str, char *var)
 	while (str && var && str[i])
 	{
 		if (ft_strncmp(str[i], var, ft_strlen(var)) == 0 && \
-		(ft_strchr(str[i], '=') - str[i]) == ft_strlen(var))
+		(ft_strchr(str[i], '=') - str[i]) == ft_strlen(var))//+1 controlu her seyi sikti
 			return (i);
 		i++;
 	}
@@ -70,10 +70,17 @@ char	*value_of_expandable(t_shell *shell, char *var)
 	return (NULL);
 }
 
-void	ft_env(t_shell *shell)
+void	ft_env(t_shell *shell, char **str)
 {
 	int	i;
 
+	if (ft_double_strlen(str) > 1)
+	{
+		ft_putstr_fd("env: ", 2);
+		ft_putstr_fd(str[1], 2);
+		ft_putendl_fd(": No such file or directory", 2);
+		return ;
+	}
 	i = 0;
 	while (shell->my_env != NULL && shell->my_env[i] != NULL)
 	{

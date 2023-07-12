@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 02:04:07 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/06 04:58:08 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/13 00:25:58 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	update_oldpwd(t_shell *shell)
 		add_env_var(shell, "OLDPWD=", temp);
 	}
 	else
-		update_env_var(shell, "OLDPWD=", temp);
+		update_env_var(shell, "OLDPWD", temp);
 	free(temp);
 }
 
@@ -45,15 +45,15 @@ void	ft_cd(t_shell *shell, char *path)
 		if (!str)
 			return ;
 		if (chdir(str) == -1)
-			return (perror("chdir"));
-		update_env_var(shell, "PWD=", str);
+			return (perror("cd:"));
+		update_env_var(shell, "PWD", str);
 	}
 	else
 	{
 		if (chdir(path) == -1)
-			return (perror("chdir"));
+			return (ft_putstr_fd("MinisHell: cd: ", 2), perror(path));
 		str = getcwd(NULL, 0);
-		update_env_var(shell, "PWD=", str);
+		update_env_var(shell, "PWD", str);
 		free(str);
 	}
 }

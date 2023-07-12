@@ -36,6 +36,7 @@ bool	order_heredoc(t_shell *shell, t_token *token)
 		if (temp->type == 0)
 		{
 			enqueue(&shell->front, &shell->rear, temp);
+			// enqueue(&shell->front, &shell->rear, shell_strdup(temp->str), temp->type);
 			temp = temp->next;
 			temp->type = 4;
 			enqueue(&shell->front, &shell->rear, temp);

@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 04:10:58 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/08 07:48:59 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/10 05:28:44 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int	open_file(char *filename, int flag, t_pipex *pipex)
 		{
 			free_pipex(pipex);
 			perror("pipex: input");
-			write(1, "HATA\n", 5);
 			exit(EXIT_FAILURE);
 		}
 		return (fd);
@@ -70,9 +69,9 @@ int	open_file(char *filename, int flag, t_pipex *pipex)
 		fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd < 0 || (access(filename, W_OK) != 0))
 	{
-		free_pipex(pipex);
+		// free_pipex(pipex);
 		perror("pipex: output");
-		exit(EXIT_FAILURE);
+		// exit(EXIT_FAILURE);
 	}
 	return (fd);
 }
