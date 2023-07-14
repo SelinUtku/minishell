@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:25:09 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/12 06:01:03 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 05:23:10 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,16 @@ void	create_env(t_shell *shell, char **env)
 int	ft_getenv(char **str, char *var)
 {
 	int	i;
+	int	custom;
 
 	i = 0;
+	custom = 0;
+	if (var && var[ft_strlen(var) - 1] == '=')
+		custom = 1;
 	while (str && var && str[i])
 	{
 		if (ft_strncmp(str[i], var, ft_strlen(var)) == 0 && \
-		(ft_strchr(str[i], '=') - str[i]) == ft_strlen(var))//+1 controlu her seyi sikti
+		(ft_strchr(str[i], '=') - str[i]) == ft_strlen(var) - custom)
 			return (i);
 		i++;
 	}
@@ -78,7 +82,8 @@ void	ft_env(t_shell *shell, char **str)
 	{
 		ft_putstr_fd("env: ", 2);
 		ft_putstr_fd(str[1], 2);
-		ft_putendl_fd(": No such file or directory", 2);
+		ft_putendl_fd(": env no argument or no options", 2);
+		shell->status = 1;
 		return ;
 	}
 	i = 0;
@@ -87,4 +92,5 @@ void	ft_env(t_shell *shell, char **str)
 		printf("%s\n", shell->my_env[i]);
 		i++;
 	}
+	shell->status = 0;
 }

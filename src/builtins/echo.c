@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:51 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/12 04:49:30 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 04:29:09 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	ft_echo(t_shell *shell, char **str)
 	}
 	if (new_line)
 		ft_putstr_fd("\n", STDOUT_FILENO);
+	shell->status = 0;
 }
 
 int	check_echo_flag(char *str)

@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 04:10:58 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/10 05:28:44 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 03:26:46 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	output_dup2(int output)
 	close(output);
 }
 
-void	my_waitpid(t_pipex *pipex)
+void	my_waitpid(t_shell *shell, t_pipex *pipex)
 {
 	int	i;
 	int	status;
@@ -44,8 +44,8 @@ void	my_waitpid(t_pipex *pipex)
 		waitpid(pipex->pid[i], &status, 0);
 	free(pipex->pid);
 	free_int_dubleptr(pipex->pipeline, pipex->num_commands - 1);
-	// if (WIFEXITED(status))
-	// 	exit (WEXITSTATUS(status));
+	if (WIFEXITED(status))
+		shell->status = WEXITSTATUS(status);
 }
 
 int	open_file(char *filename, int flag, t_pipex *pipex)

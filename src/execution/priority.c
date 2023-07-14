@@ -5,6 +5,12 @@ void	exec_order(t_shell *shell)
 	t_token	*temp;
 
 	temp = shell->token;
+	if (temp && temp->type == PIPE)
+	{
+		temp->type = SYNTAX_ERROR;
+		ft_putendl_fd("Minishell: syntax error near unexpected token `|'", 2);
+		return ;
+	}
 	if (order_heredoc(shell, temp) == false)
 		return ;
 	while (temp)
@@ -66,14 +72,29 @@ void	order_redirections(t_shell *shell, t_token *token)
 
 bool	is_syntax_error(t_shell *shell, t_token *token)
 {
+	if (token->type == PIPE)
+	{
+		if (token->next == NULL || token->next->type == PIPE)
+		{
+			token->type = SYNTAX_ERROR;
+			ft_putendl_fd("Minishell: syntax error near unexpected token `|'", 2);
+			return (true);
+		}
+	}
 	if (token->type >= 0 && token->type <= 3)
 	{
 		if (token->next == NULL || token->next->type != 7)
 		{
+			token->type = SYNTAX_ERROR;
 			if (token->next != NULL)
-				printf("syntax error near unexpected token '%s'\n", token->next->str);
+			{
+				ft_putstr_fd("Minishell: ", 2);
+				ft_putstr_fd("syntax error near unexpected token `", 2);
+				ft_putstr_fd(token->next->str, 2);
+				ft_putendl_fd("'", 2);
+			}
 			else
-				printf("syntax error near unexpected token 'newline'\n");
+				ft_putendl_fd("Minishell: syntax error near unexpected token `newline'", 2);
 			return (true);
 		}
 	}

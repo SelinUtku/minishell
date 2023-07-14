@@ -44,7 +44,7 @@ bool	is_heredoc(t_shell *shell);
 bool	is_output_redirection_append(t_shell *shell);
 bool	is_pipe(t_shell *shell);
 //main
-void	get_input(char **env);
+int		get_input(char **env);
 
 void	s_quote_state(t_shell *shell);
 void	d_quote_state(t_shell *shell);
@@ -55,15 +55,20 @@ void	create_env(t_shell *shell, char **env);
 void	ft_env(t_shell *shell, char **str);
 int		ft_getenv(char **str, char *var);
 char	*value_of_expandable(t_shell *shell, char *var);
-void	ft_pwd(void);
+void	ft_pwd(t_shell *shell);
 void	ft_cd(t_shell *shell, char *path);
-void	ft_exit(t_shell *shell);
+void	ft_exit(t_shell *shell, char **str);
 void	update_oldpwd(t_shell *shell);
-void	ft_export(t_shell *shell, char *var, char *value);
+void	ft_export(t_shell *shell, char **str);
 void	update_env_var(t_shell *shell, char *var, char *value);
 void	add_env_var(t_shell *shell, char *var, char *value);
 void	append_env_var(t_shell *shell, char *var, char *value);
 void	delete_env_var(t_shell *shell, char *var);
+void	ft_unset(t_shell *shell, char **str);
+void	del_node_from_list(t_shell *shell, t_export *del);
+void	del_one_list(t_shell *shell, char *key);
+void	print_export_list(t_shell *shell);
+void	create_export_list(t_shell *shell);
 
 // expansion
 void	is_expandable(t_shell *shell);
@@ -75,7 +80,7 @@ char	*shell_strjoin(t_shell *shell, char const *s1, char const *s2);
 char	*shell_substr(t_shell *shell, char const *s, int start, int len);
 
 void	pipex(t_shell *shell, char **envp);
-int	pipe_counter(t_shell *shell);
+int		pipe_counter(t_shell *shell);
 t_token	*find_right_token(t_shell *shell, int num_pipe);
 void	handle_redirections(t_shell *shell, t_token *child, t_pipex *pipex);
 void	exec_child_process(t_shell *shell,t_pipex *pipex, int i);
@@ -93,7 +98,7 @@ void	error_cmdpath(t_pipex *pipex);
 void	exec_here_doc(t_pipex *pipex, char **argv, int argc);
 //Some usefull functions. File > pipex_utils.c
 void	my_dup2(int input, int output, t_pipex *pipex);
-void	my_waitpid(t_pipex *pipex);
+void	my_waitpid(t_shell *shell,t_pipex *pipex);
 int		open_file(char *filename, int flag, t_pipex *pipex);
 //Parsing. File > parsing.c 
 char	**ft_parser(char *string);
@@ -110,4 +115,14 @@ int		which_builtin(t_shell *shell, char **str);
 void	ft_echo(t_shell *shell, char **str);
 void	exec_builtin(t_shell *shell, char **str, t_pipex *pipex);
 int		is_builtin(char *str);
+void	here_doc(t_shell *shell);
+void	dollar_func(t_shell *shell, char *str, int *i);
+void	unlink_heredocs(t_shell *shell);
+int		ft_strcmp(char *str1, char *str2);
+void	error_not_valid_identifier(t_shell *shell, char *str1, char *str2);
+void	error_invalid_option(t_shell *shell, char **str);
+void	add_list(t_shell *shell, char *key, char *value);
+int		check_list(t_shell *shell, char *str, char *value);
+int		is_valid_syntax_var(t_shell *shell, char *str);
+
 #endif

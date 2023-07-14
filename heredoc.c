@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 03:27:52 by sutku             #+#    #+#             */
-/*   Updated: 2023/07/13 01:40:20 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 13:52:54 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	execute_heredoc(t_shell *shell, t_token *temp_token, int fd)
 	int		len;
 
 	str = NULL;
-	write(1, "> ", 2);
+	write(0, "> ", 2);
 	str = get_next_line(STDIN_FILENO);
 	if (delimiter_str_cmp(temp_token->str, str) == 0)
 		return (free(str), 0);
@@ -138,6 +138,8 @@ void	here_doc(t_shell *shell)
 	t_token	*temp_token;
 
 	shell->num_heredoc = 0;
+	if (!shell->front || !shell->front->content)
+		return ;
 	temp_token = shell->front->content;
 	while (temp_token)
 	{
@@ -156,5 +158,24 @@ void	here_doc(t_shell *shell)
 			temp_token = temp_token->next;
 		}
 		temp_token = temp_token->next;
+	}
+}
+
+void	unlink_heredocs(t_shell *shell)
+{
+	int	i;
+	t_token *temp;
+
+	i = 0;
+	if (shell->num_heredoc)
+		temp = shell->front->content;
+	while (i < shell->num_heredoc && temp)
+	{
+		if (temp->type == 5)
+		{
+			unlink(temp->str);
+			i++;
+		}
+		temp = temp->next;
 	}
 }

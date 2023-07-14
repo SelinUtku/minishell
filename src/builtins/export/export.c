@@ -6,11 +6,61 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:37:42 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/12 06:15:35 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 16:26:41 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
+
+void	ft_export(t_shell *shell, char **str)
+{
+	int		i;
+	int		j;
+	int		flag;
+	char	*key;
+
+	shell->status = 0;
+	if (!str[1])
+		return (print_export_list(shell));
+	if (str[1][0] == '-')
+		return (error_invalid_option(shell, str));
+	i = 1;
+	while (str[i])
+	{
+		j = 0;
+		flag = 1;
+		while (str[i][j] != '\0' && str[i][j] != '=' && flag)
+		{
+			if (ft_isalpha(str[i][0]) == 0 && str[i][0] != '_')
+			{
+				error_not_valid_identifier(shell, str[0], str[i]);
+				flag = 0 ;
+			}
+			else if (ft_isalnum(str[i][j]) == 0 && str[i][j] != '_')
+			{
+				error_not_valid_identifier(shell, str[0], str[i]);
+				flag = 0;
+			}
+			j++;
+		}
+		if (flag)
+		{
+			if (str[i][j] == '=')
+			{
+				key = shell_substr(shell, str[i], 0, j);
+				if (check_list(shell, key, shell_strdup(shell, str[i] + j + 1)))
+					add_list(shell, key, shell_strdup(shell, str[i] + j + 1));
+				if (ft_getenv(shell->my_env, key) == -1)
+					add_env_var(shell, key, shell_strdup(shell, str[i] + j));
+				else
+					update_env_var(shell, key, shell_strdup(shell, str[i] + j));
+			}
+			else
+				add_list(shell, shell_substr(shell, str[i], 0, j), NULL);
+		}
+		i++;
+	}
+}
 
 void	update_env_var(t_shell *shell, char *var, char *value)
 {
@@ -21,11 +71,8 @@ void	update_env_var(t_shell *shell, char *var, char *value)
 	if (index != -1)
 	{
 		temp = shell->my_env[index];
-		shell->my_env[index] = shell_strjoin(shell, var, "=");
-		// del_one_from_garbage(&shell->garbage, temp);
-		temp = shell->my_env[index];
 		shell->my_env[index] = shell_strjoin(shell, var, value);
-		// del_one_from_garbage(&shell->garbage, temp);
+		del_one_from_garbage(&shell->garbage, temp);
 	}
 }
 
@@ -59,7 +106,7 @@ void	add_env_var(t_shell *shell, char *var, char *value)//export
 	}
 	shell->my_env[i] = shell_strjoin(shell, var, value);
 	shell->my_env[i + 1] = NULL;
-	free_double_from_garbage(&shell->garbage, temp);
+	// free_double_from_garbage(&shell->garbage, temp); leak var.
 	// free(temp); // del one double pointer
 }
 

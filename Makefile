@@ -14,16 +14,17 @@ WHITE = \033[0;97m
 # USER		= $(shell whoami)
 
 MAIN_SRC	= src/main/main.c src/garbage_collector/add_to_garbage.c src/garbage_collector/del_from_garbage.c \
-			src/garbage_collector/my_malloc.c src/execution/priority.c src/execution/queue.c help_function.c \
+			src/garbage_collector/my_malloc.c src/execution/priority.c src/expansion/queue.c help_function.c \
 			src/expansion/expand.c src/expansion/merge_queue.c src/execution/clean_up.c src/execution/exec.c \
-			src/execution/file_redirections.c src/execution/get_paths.c src/execution/exec_builtin.c 
+			src/execution/file_redirections.c src/execution/get_paths.c src/execution/exec_builtin.c heredoc.c \
+
 
 PARSE_SRC	=	src/parsing/heredoc.c \
 				src/parsing/redirections.c \
 				src/parsing/tokenizer.c
 
-BUILTIN_SRC	= src/builtins/cd.c src/builtins/env.c src/builtins/exit.c src/builtins/export.c src/builtins/unset.c \
-			 src/builtins/echo.c src/builtins/pwd.c
+BUILTIN_SRC	= src/builtins/cd.c src/builtins/env.c src/builtins/exit.c src/builtins/export/export.c src/builtins/unset.c \
+			 src/builtins/echo.c src/builtins/pwd.c src/builtins/export/export_list.c
 BUILTIN_OBJ	= $(BUILTIN_SRC:.c=.o)
 
 MAIN_OBJ	= $(MAIN_SRC:.c=.o)

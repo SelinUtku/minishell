@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 02:25:13 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/13 00:36:05 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 00:35:31 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	pipex(t_shell *shell, char **envp)
 	create_pipelines(pipex, pipex->num_commands - 1);
 	create_child_process(shell, pipex);
 	close_pipes(pipex);
-	my_waitpid(pipex);
+	my_waitpid(shell, pipex);
 }
 
 void	create_pipelines(t_pipex *pipex, int num)

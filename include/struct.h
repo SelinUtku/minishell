@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/12 03:18:31 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 08:54:46 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef enum e_type
 	PIPE,
 	WORD,
 	SYNTAX_ERROR,
+	Q_DELIMITER,
 }t_type;
 
 typedef struct s_token
@@ -44,6 +45,13 @@ typedef struct s_token
 	struct s_token	*next;
 	char			*str;
 }t_token;
+
+typedef struct s_export
+{
+	char			*key;
+	char			*value;
+	struct s_export *next;
+}t_export;
 
 typedef struct s_queue
 {
@@ -67,7 +75,9 @@ typedef struct s_pipex
 typedef struct s_shell
 {
 	int			i;
+	int			status;
 	int			num_pipe;
+	int			num_heredoc;
 	char		*input;
 	char		**my_env;
 	t_garbage	*garbage;
@@ -76,6 +86,7 @@ typedef struct s_shell
 	t_queue		*rear;
 	t_queue		*exp_front;
 	t_queue		*exp_rear;
+	t_export	*export_list;
 }	t_shell;
 
 

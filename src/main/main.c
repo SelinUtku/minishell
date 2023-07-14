@@ -6,11 +6,25 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/13 00:49:24 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 14:02:00 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+int	check_syntax_error(t_shell *shell)
+{
+	t_token *temp;
+
+	temp = shell->token;
+	while (temp)
+	{
+		if (temp->type == SYNTAX_ERROR)
+			return (shell->status = 258, 1);
+		temp = temp->next;
+	}
+	return (0);
+}
 
 int	main(int argc, char **argv, char **env)
 {
@@ -21,7 +35,7 @@ int	main(int argc, char **argv, char **env)
 	}
 	else
 	{
-		get_input(env);
+		return (get_input(env));
 	}
 	return (0);
 }
@@ -69,7 +83,7 @@ void	init_shell_struct(t_shell *shell)
 	shell->exp_rear = NULL;
 }
 
-void	get_input(char **env)
+int	get_input(char **env)
 {
 	char	*input;
 	char	*back_up;
@@ -78,33 +92,55 @@ void	get_input(char **env)
 	// atexit(&leaks);
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
-		return ;
+		return (0);
+	shell->status = 0;
 	shell->garbage = NULL;
+	shell->export_list = NULL;
 	init_shell_struct(shell);
 	create_env(shell, env);
+	create_export_list(shell);
 	while (1)
 	{
 		init_shell_struct(shell);
-		shell->input = readline("MinisHELL$ ");
-		ft_exit(shell);
+		if (isatty(fileno(stdin)))
+			shell->input = readline("MinisHell$ ");
+		else
+		{
+			char *line;
+			line = get_next_line(fileno(stdin));
+			shell->input = ft_strtrim(line, "\n");
+			free(line);
+		}
+		// shell->input = readline("MinisHELL$ ");
+		// ft_exit(shell);
+		if (shell->input == NULL || shell->input[0] == EOF)
+			exit(shell->status);
 		add_history(shell->input);
 		examine_type(shell);
-		print_token(shell->token);
+		// print_token(shell->token);
 		exec_order(shell);
-		print_order(&shell->front);
-		// is_expandable(shell);
-		// shell->num_pipe = pipe_counter(shell);
-		// if (shell->num_pipe == 0)
-		// {
-		// 	char **str = command_pointer(shell->front);
-		// 	if (is_builtin(*str))
-		// 		which_builtin(shell, str);
-		// 	else
-		// 		pipex(shell, shell->my_env);
-		// }
-		// else
-		// 	pipex(shell, shell->my_env);
+		is_expandable(shell);
+		here_doc(shell);
+		// print_order(&shell->front);
+		if (check_syntax_error(shell) == 0)
+		{
+			shell->num_pipe = pipe_counter(shell);
+			if (shell->num_pipe == 0)
+			{
+				char **str = command_pointer(shell->token);
+				if (is_builtin(*str))
+					which_builtin(shell, str);
+				else
+					pipex(shell, shell->my_env);
+			}
+			else
+				pipex(shell, shell->my_env);
+		}
+		unlink_heredocs(shell);
 		// print_token(shell->token);
 		free(shell->input);
 	}
+	// printf("asdfasdf%d", shell->status);
+	return (shell->status);
+
 }

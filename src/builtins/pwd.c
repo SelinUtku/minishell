@@ -6,13 +6,13 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:09:49 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/11 03:26:20 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 04:44:18 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_pwd(void)
+void	ft_pwd(t_shell *shell)
 {
 	char	*ptr;
 
@@ -20,10 +20,12 @@ void	ft_pwd(void)
 	if (!ptr)
 	{
 		perror("pwd");
+		shell->status = 1;
 		return ;
 	}
 	ft_putstr_fd(ptr, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
 	free(ptr);
+	shell->status = 0;
 	return ;
 }
