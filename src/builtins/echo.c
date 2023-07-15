@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:51 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/14 04:29:09 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 17:20:34 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	ft_echo(t_shell *shell, char **str)
 
 	i = 1;
 	new_line = 1;
-	if (check_echo_flag(str[i]))
+	while (check_echo_flag(str[i]))
 	{
 		new_line = 0;
 		++i;

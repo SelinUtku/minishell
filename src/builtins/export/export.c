@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:37:42 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/14 16:26:41 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 16:58:33 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	ft_export(t_shell *shell, char **str)
 		return (print_export_list(shell));
 	if (str[1][0] == '-')
 		return (error_invalid_option(shell, str));
+	if (str[1][0] == '\0' || str[1][0] == '=')
+		return (error_not_valid_identifier(shell, str[0], str[i]));
 	i = 1;
 	while (str[i])
 	{

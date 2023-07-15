@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 04:10:58 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/14 03:26:46 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 17:34:10 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	input_dup2(int input)
 	{
 		perror("dup2");
 		// free_pipex(pipex);
-		exit(9);
+		exit(1);
 	}
 	close(input);
 }
@@ -29,7 +29,7 @@ void	output_dup2(int output)
 	{
 		perror("dup2");
 		// free_pipex(pipex);
-		exit(9);
+		exit(1);
 	}
 	close(output);
 }

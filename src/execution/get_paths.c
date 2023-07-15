@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 05:05:14 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/08 06:40:09 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 17:52:10 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,16 @@ char	*get_command_path(t_pipex *pipex)
 		{
 			free_char_dubleptr(pipex->all_paths);
 			free(pipex->cmd_path);
+			ft_putstr_fd("Minishell: ", 2);
+			ft_putstr_fd(pipex->command[0], 2);
+			ft_putendl_fd(": No such file or directory", 2);
 			exit(126);
 		}
-		free(pipex->cmd_path);
+		else
+		{
+			// error_cmdpath(pipex);
+			free(pipex->cmd_path);
+		}
 	}
 	return (error_cmdpath(pipex), NULL);
 }
@@ -65,18 +72,25 @@ char	*is_exact_path(t_pipex *pipex)
 	{
 		if (access(pipex->command[0], X_OK) == 0)
 			return (pipex->command[0]);
-		else
+		else if (access(pipex->command[0], F_OK) == 0)
+		{
+			ft_putstr_fd("Minishell: ", 2);
+			ft_putstr_fd(pipex->command[0], 2);
+			ft_putendl_fd(": No such file or directory", 2);
 			exit(126);
+		}
+		else
+			error_cmdpath(pipex);
 	}
 	return (NULL);
 }
 
 void	error_cmdpath(t_pipex *pipex)
 {
-	write(2, "pipex: ", 7);
+	write(2, "Minishell: ", 12);
 	write(2, pipex->command[0], ft_strlen(pipex->command[0]));
 	write(2, ": command not found\n", 21);
-	free_char_dubleptr(pipex->all_paths);
+	// free_char_dubleptr(pipex->all_paths);
 	free_pipex(pipex);
 	exit(127);
 }

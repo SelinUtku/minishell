@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 02:04:07 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/14 05:24:18 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/14 17:12:44 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,13 @@ void	ft_cd(t_shell *shell, char *path)
 	else
 	{
 		if (chdir(path) == -1)
-			return (shell->status = 1, ft_putstr_fd("MinisHell: cd: ", 2), perror(path));
+		{
+			ft_putstr_fd("Minishell: cd: ", 2);
+			ft_putstr_fd(path, 2);
+			ft_putendl_fd(": No such file or directory", 2);
+			shell->status = 1;
+			return ;
+		}
 		str = getcwd(NULL, 0);
 		update_env_var(shell, "PWD=", str);
 		free(str);
