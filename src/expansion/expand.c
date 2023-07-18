@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 02:41:30 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/18 07:49:19 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/18 10:38:22 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ void	delete_quotes(t_shell *shell)
 	t_token	*temp_token;
 	int		*i;
 	int		j;
+	int		k;
 
 	temp_token = shell->token;
 	j = 0;

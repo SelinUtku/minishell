@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/18 09:45:06 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/18 12:21:12 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	print_token(t_token *token)
 	while (temp)
 	{
 		printf("Token Type : %d ", temp->type);
-		printf("Token String : %s\n", temp->str);
+		printf("Token String : %s$\n", temp->str);
 		temp = temp->next;
 	}
 }

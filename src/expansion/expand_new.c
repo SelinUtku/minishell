@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 03:25:05 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/18 09:41:57 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/18 12:35:24 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ int	count_words(char *str)
 	counter = 0;
 	while (str && str[i] != '\0')
 	{
-		while (str && ft_strchr(IFS, str[i]))
+		while (str && (str[i] == 32 || str[i] == 9 || str[i] == 10))
 			i++;
 		if (str[i] != '\0')
 			counter++;
-		while (ft_strchr(IFS, str[i]) == 0 && str[i] != '\0')
+		while (str[i] != 32 && str[i] != 9 && str[i] != 10 && str[i] != '\0')
 		{
 			if (str[i] == '\'')
 				single_quote_state(str, &i);
@@ -134,7 +134,7 @@ void	dollar_func(t_shell *shell, char *str, int *i)
 	}
 	if (str[*i] == '_' || ft_isalpha(str[*i]) == 1)
 	{
-		while (ft_isalnum(str[*i]) == 1 || str[*i] == '_')
+		while (str[*i] && (ft_isalnum(str[*i]) == 1 || str[*i] == '_'))
 			(*i)++;
 		var = shell_substr(shell, str, start, *i - start);
 		if (ft_getenv(shell->my_env, var) == -1)
@@ -213,10 +213,10 @@ void	split_after_expand(t_shell *shell)
 			j = 0;
 			while (str && str[i] != '\0')
 			{
-				while (str && ft_strchr(IFS, str[i]))
+				while (str && (str[i] == 32 || str[i] == 9 || str[i] == 10 ))
 					i++;
 				start = i;
-				while (ft_strchr(IFS, str[i]) == 0 && str[i] != '\0')
+				while (str[i] != 32 && str[i] != 9 && str[i] != 10 && str[i] != '\0')
 				{
 					if (str[i] == '\'')
 						single_quote_state(str, &i);

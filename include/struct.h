@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/18 06:24:11 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/18 12:08:02 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define STRUCT_H
 # define SYMBOLS "<>|"
 # define WORD_DELIMITERS "<>| \0"
-# define IFS " \t\n"
+# define IFS "' ''\t''\n'"
 
 typedef struct s_garbage
 {

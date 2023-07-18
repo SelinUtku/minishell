@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 23:23:52 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/18 06:25:56 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/18 12:25:30 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ bool	is_pipe(t_shell *shell)
 
 void	ft_isspace(t_shell *shell)
 {
-	while (shell->input[shell->i] == ' ' && shell->input[shell->i] != '\0')
+	while (shell->input[shell->i] == 32  && shell->input[shell->i] != '\0')
 		shell->i++;
 }
 
