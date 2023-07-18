@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 03:55:30 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/14 16:22:39 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/18 08:48:52 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	is_valid_syntax_var(t_shell *shell, char *str)
 	int	i;
 	int	valid;
 
-	valid = 0;
+	valid = 1;
 	if (ft_isalpha(str[0]) == 0 && str[0] != '_')
 		return (0);
 	i = 1;

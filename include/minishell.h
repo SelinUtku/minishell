@@ -82,7 +82,7 @@ char	*shell_substr(t_shell *shell, char const *s, int start, int len);
 void	pipex(t_shell *shell, char **envp);
 int		pipe_counter(t_shell *shell);
 t_token	*find_right_token(t_shell *shell, int num_pipe);
-void	handle_redirections(t_shell *shell, t_token *child, t_pipex *pipex);
+void	handle_redirections(t_shell *shell, t_token *child);
 void	exec_child_process(t_shell *shell,t_pipex *pipex, int i);
 char	**command_pointer(t_token *child);
 void	create_child_process(t_shell *shell, t_pipex *pipex);
@@ -99,7 +99,7 @@ void	exec_here_doc(t_pipex *pipex, char **argv, int argc);
 //Some usefull functions. File > pipex_utils.c
 void	my_dup2(int input, int output, t_pipex *pipex);
 void	my_waitpid(t_shell *shell,t_pipex *pipex);
-int		open_file(char *filename, int flag, t_pipex *pipex);
+int		open_file(char *filename, int flag);
 //Parsing. File > parsing.c 
 char	**ft_parser(char *string);
 char	**word_lenght(char *string, int size);
@@ -124,5 +124,7 @@ void	error_invalid_option(t_shell *shell, char **str);
 void	add_list(t_shell *shell, char *key, char *value);
 int		check_list(t_shell *shell, char *str, char *value);
 int		is_valid_syntax_var(t_shell *shell, char *str);
-
+void	split_after_expand(t_shell *shell);
+void	add_token_next(t_shell *shell, t_token *token, t_type type, char *str);
+void	delete_quotes(t_shell *shell);
 #endif

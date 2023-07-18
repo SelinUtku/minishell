@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:25:09 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/15 01:59:06 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/15 02:58:21 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	ft_env(t_shell *shell, char **str)
 	i = 0;
 	while (shell->my_env != NULL && shell->my_env[i] != NULL)
 	{
-		printf("%s\n", shell->my_env[i]);
+		ft_putendl_fd(shell->my_env[i], 1);
 		i++;
 	}
 	shell->status = 0;

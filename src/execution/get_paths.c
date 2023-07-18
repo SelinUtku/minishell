@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 05:05:14 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/14 17:52:10 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/18 09:34:17 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	**get_env_path(char **envp)
 			i++;
 		}
 	}
-	return (ft_split("/usr/bin", ':'));
+	return (ft_split(getcwd(NULL, 0), ':'));
 }
 
 char	*get_command_path(t_pipex *pipex)
@@ -68,8 +68,10 @@ char	*get_command_path(t_pipex *pipex)
 
 char	*is_exact_path(t_pipex *pipex)
 {
-	if (ft_strchr(pipex->command[0], '/') || pipex->command[0][0] == '.')
+	if (ft_strchr(pipex->command[0], '/') ||  pipex->command[0][0] == '.')
 	{
+		if (ft_strchr(pipex->command[0], '/') == 0 && pipex->command[0][0] == '.')
+			error_cmdpath(pipex);
 		if (access(pipex->command[0], X_OK) == 0)
 			return (pipex->command[0]);
 		else if (access(pipex->command[0], F_OK) == 0)
@@ -82,6 +84,8 @@ char	*is_exact_path(t_pipex *pipex)
 		else
 			error_cmdpath(pipex);
 	}
+	else if (!pipex->command[0][0])
+		error_cmdpath(pipex);
 	return (NULL);
 }
 

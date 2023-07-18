@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 23:23:52 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/06 04:35:37 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/18 06:25:56 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	add_token_node(t_shell *shell, t_type type, char *str)
 	new->str = str;
 	if (shell->token == NULL)
 	{
-		new->prev = NULL;
 		new->next = NULL;
 		shell->token = new;
 	}
@@ -31,10 +30,22 @@ void	add_token_node(t_shell *shell, t_type type, char *str)
 		last = shell->token;
 		while (last->next != NULL)
 			last = last->next;
-		new->prev = last;
 		new->next = NULL;
 		last->next = new;
 	}
+}
+
+void	add_token_next(t_shell *shell, t_token *token, t_type type, char *str)
+{
+	t_token	*new;
+	t_token	*temp;
+
+	new = my_malloc(&shell->garbage, 1, sizeof(t_token));
+	new->type = type;
+	new->str = str;
+	temp = token->next;
+	token->next = new;
+	new->next = temp;
 }
 
 void	examine_type(t_shell *shell)

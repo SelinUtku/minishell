@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/14 08:54:46 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/18 06:24:11 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define STRUCT_H
 # define SYMBOLS "<>|"
 # define WORD_DELIMITERS "<>| \0"
+# define IFS " \t\n"
 
 typedef struct s_garbage
 {
@@ -35,13 +36,13 @@ typedef enum e_type
 	WORD,
 	SYNTAX_ERROR,
 	Q_DELIMITER,
+	AMBIGIOUS_R,
 }t_type;
 
 typedef struct s_token
 {
 	t_type			type;
 	int				index;
-	struct s_token	*prev;
 	struct s_token	*next;
 	char			*str;
 }t_token;

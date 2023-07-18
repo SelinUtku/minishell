@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 02:25:13 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/14 00:35:31 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/15 03:39:42 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,29 +113,29 @@ t_token	*find_right_token(t_shell *shell, int num_pipe)
 	return (temp);
 }
 
-void	handle_redirections(t_shell *shell, t_token *blaa, t_pipex *pipex)
+void	handle_redirections(t_shell *shell, t_token *blaa)
 {
-	int	fd;
-	t_token *child;
+	int		fd;
+	t_token	*child;
 
 	child = blaa;
 	while (child && child->type != 6)
 	{
 		if (child->type == INPUT_R)
 		{
-			fd = open_file(child->next->str, INPUT_R, pipex);
+			fd = open_file(child->next->str, INPUT_R);
 			input_dup2(fd);
 			close(fd);
 		}
 		else if (child->type == OUTPUT_R)
 		{
-			fd = open_file(child->next->str, OUTPUT_R, pipex);
+			fd = open_file(child->next->str, OUTPUT_R);
 			output_dup2(fd);
 			close(fd);
 		}
 		else if (child->type == OUTPUT_R_APPEND)
 		{
-			fd = open_file(child->next->str, OUTPUT_R, pipex);
+			fd = open_file(child->next->str, OUTPUT_R);
 			output_dup2(fd);
 			close(fd);
 		}
@@ -163,7 +163,7 @@ void	exec_child_process(t_shell *shell,t_pipex *pipex, int i)
 				output_dup2(pipex->pipeline[i][1]);
 			}
 		}
-		handle_redirections(shell, child, pipex);
+		handle_redirections(shell, child);
 		pipex->command = command_pointer(child);
 		if (is_builtin(pipex->command[0]))
 			exec_builtin(shell, pipex->command, pipex);

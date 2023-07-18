@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 03:27:52 by sutku             #+#    #+#             */
-/*   Updated: 2023/07/14 13:52:54 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/18 08:37:31 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*merge_expanded_words(t_shell *shell)
 	return (temp);
 }
 
-void	heredoc_expand(t_shell *shell, char *str)
+void	heredoc_expand(t_shell *shell, char *str, t_type type)
 {
 	int	start;
 	int	*i;
@@ -124,7 +124,7 @@ int	execute_heredoc(t_shell *shell, t_token *temp_token, int fd)
 	}
 	else
 	{
-		heredoc_expand(shell, str);
+		heredoc_expand(shell, str, temp_token->type);
 		free(str);
 		ft_putstr_fd(merge_expanded_words(shell), fd);
 	}
@@ -164,7 +164,7 @@ void	here_doc(t_shell *shell)
 void	unlink_heredocs(t_shell *shell)
 {
 	int	i;
-	t_token *temp;
+	t_token	*temp;
 
 	i = 0;
 	if (shell->num_heredoc)

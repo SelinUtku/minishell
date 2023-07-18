@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/14 14:02:00 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/18 09:45:06 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_syntax_error(t_shell *shell)
 {
-	t_token *temp;
+	t_token	*temp;
 
 	temp = shell->token;
 	while (temp)
@@ -120,6 +120,8 @@ int	get_input(char **env)
 		// print_token(shell->token);
 		exec_order(shell);
 		is_expandable(shell);
+		split_after_expand(shell);
+		delete_quotes(shell);
 		here_doc(shell);
 		// print_order(&shell->front);
 		if (check_syntax_error(shell) == 0)
@@ -129,7 +131,14 @@ int	get_input(char **env)
 			{
 				char **str = command_pointer(shell->token);
 				if (is_builtin(*str))
+				{
+					int fd_in = dup(STDIN_FILENO);
+					int	fd_out = dup(STDOUT_FILENO);
+					handle_redirections(shell, shell->token);
 					which_builtin(shell, str);
+					input_dup2(fd_in);
+					output_dup2(fd_out);
+				}
 				else
 					pipex(shell, shell->my_env);
 			}

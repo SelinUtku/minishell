@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 04:10:58 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/14 17:34:10 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/15 03:46:22 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	input_dup2(int input)
 		// free_pipex(pipex);
 		exit(1);
 	}
-	close(input);
+	if (input)
+		close(input);
 }
 
 void	output_dup2(int output)
@@ -31,7 +32,8 @@ void	output_dup2(int output)
 		// free_pipex(pipex);
 		exit(1);
 	}
-	close(output);
+	if (output != 1)
+		close(output);
 }
 
 void	my_waitpid(t_shell *shell, t_pipex *pipex)
@@ -48,7 +50,7 @@ void	my_waitpid(t_shell *shell, t_pipex *pipex)
 		shell->status = WEXITSTATUS(status);
 }
 
-int	open_file(char *filename, int flag, t_pipex *pipex)
+int	open_file(char *filename, int flag)
 {
 	int	fd;
 
@@ -57,7 +59,7 @@ int	open_file(char *filename, int flag, t_pipex *pipex)
 		fd = open(filename, O_RDONLY);
 		if (fd < 0)
 		{
-			free_pipex(pipex);
+			// free_pipex(pipex);
 			perror("pipex: input");
 			exit(EXIT_FAILURE);
 		}
