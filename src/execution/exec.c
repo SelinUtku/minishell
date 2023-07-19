@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 02:25:13 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/15 03:39:42 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/19 03:00:32 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,24 @@ t_token	*find_right_token(t_shell *shell, int num_pipe)
 	return (temp);
 }
 
+void	output_dup3(int output)
+{
+	if (dup2(output, STDOUT_FILENO) == -1)
+	{
+		perror("dup2");
+		// free_pipex(pipex);
+		exit(1);
+	}
+	if (dup2(output, STDERR_FILENO) == -1)
+	{
+		perror("dup2");
+		// free_pipex(pipex);
+		exit(1);
+	}
+	if (output != 1)
+		close(output);
+}
+
 void	handle_redirections(t_shell *shell, t_token *blaa)
 {
 	int		fd;
@@ -130,7 +148,7 @@ void	handle_redirections(t_shell *shell, t_token *blaa)
 		else if (child->type == OUTPUT_R)
 		{
 			fd = open_file(child->next->str, OUTPUT_R);
-			output_dup2(fd);
+			output_dup3(fd);
 			close(fd);
 		}
 		else if (child->type == OUTPUT_R_APPEND)

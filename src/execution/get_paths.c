@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 05:05:14 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/18 09:34:17 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/19 03:04:30 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,21 @@ char	*get_command_path(t_pipex *pipex)
 
 char	*is_exact_path(t_pipex *pipex)
 {
+	DIR *dir;
+
 	if (ft_strchr(pipex->command[0], '/') ||  pipex->command[0][0] == '.')
 	{
 		if (ft_strchr(pipex->command[0], '/') == 0 && pipex->command[0][0] == '.')
 			error_cmdpath(pipex);
+		dir = opendir(pipex->command[0]);
+		if (dir)
+		{
+			closedir(dir);
+			ft_putstr_fd("Minishell: ", 2);
+			ft_putstr_fd(pipex->command[0], 2);
+			ft_putendl_fd(": is a directory", 2);
+			exit(126);
+		}
 		if (access(pipex->command[0], X_OK) == 0)
 			return (pipex->command[0]);
 		else if (access(pipex->command[0], F_OK) == 0)
