@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/18 12:08:02 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/19 07:55:03 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 # define STRUCT_H
 # define SYMBOLS "<>|"
 # define WORD_DELIMITERS "<>| \0"
-# define IFS "' ''\t''\n'"
 
 typedef struct s_garbage
 {
@@ -51,7 +50,7 @@ typedef struct s_export
 {
 	char			*key;
 	char			*value;
-	struct s_export *next;
+	struct s_export	*next;
 }t_export;
 
 typedef struct s_queue
@@ -75,7 +74,6 @@ typedef struct s_pipex
 
 typedef struct s_shell
 {
-	int			i;
 	int			status;
 	int			num_pipe;
 	int			num_heredoc;

@@ -6,29 +6,11 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 03:25:05 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/18 12:35:24 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/19 08:57:15 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-void	single_quote_state(char *str, int *i)
-{
-	(*i)++;
-	while (str[(*i)] != '\'' && str[(*i)] != '\0')
-		(*i)++;
-	if (str[(*i)] == '\'')
-		(*i)++;
-}
-
-void	double_quote_state(char *str, int *i)
-{
-	(*i)++;
-	while (str[(*i)] != '\"' && str[(*i)] != '\0')
-		(*i)++;
-	if (str[(*i)] == '\"')
-		(*i)++;
-}
 
 int	count_words(char *str)
 {
@@ -109,6 +91,11 @@ void	non_quote_expand(t_shell *shell, char *str, int *i, t_type *type)
 			if (*i != start)
 				enqueue(&shell->exp_front, &shell->exp_rear, \
 				shell_substr(shell, str, start, *i - start));
+			if (str[*i + 1] == '\"' || str[*i + 1] == '\'')
+			{
+				(*i)++;
+				return ;
+			}
 			dollar_func(shell, str, i);
 			return ;
 		}
