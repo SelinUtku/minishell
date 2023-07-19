@@ -63,6 +63,7 @@ clean:
 	$(RM) $(MAIN_OBJ) 
 	$(RM) $(PARSE_OBJ)
 	$(RM) $(BUILTIN_OBJ)
+	$(RM) $(DATA_ST_OBJ)
 
 fclean: clean
 	make fclean -C $(LIBFT)
