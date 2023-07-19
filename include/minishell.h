@@ -32,22 +32,24 @@ void	del_node(t_garbage *del);
 void	free_double_from_garbage(t_garbage **garbage, char **ptr);
 
 //Parsing
-void	ft_isspace(t_shell *shell);
-bool	is_output_redirection(t_shell *shell);
-bool	is_input_redirection(t_shell *shell);
-char	*quoted_word(t_shell *shell);
-char	*non_quoted_word(t_shell *shell);
-void	examine_type(t_shell *shell);
+void	define_type(t_shell *shell);
+int		ft_isspace(char *str, int *i);
+bool	is_pipe(t_shell *shell, int	*i);
+bool	is_word(t_shell *shell, int	*i);
+bool	is_output_redirection(t_shell *shell, int *i);
+bool	is_input_redirection(t_shell *shell, int *i);
+bool	is_output_redirection_append(t_shell *shell, int *i);
+bool	is_heredoc(t_shell *shell, int *i);
+
+//data_structures
 void	add_token_node(t_shell *shell, t_type type, char *str);
-bool	is_word(t_shell *shell);
-bool	is_heredoc(t_shell *shell);
-bool	is_output_redirection_append(t_shell *shell);
-bool	is_pipe(t_shell *shell);
+void	add_token_next(t_shell *shell, t_token *token, t_type type, char *str);
+void	merge_queue(t_shell *shell, t_token *token);
 //main
 int		get_input(char **env);
 
-void	s_quote_state(t_shell *shell);
-void	d_quote_state(t_shell *shell);
+void	single_quote_state(char *str, int *i);
+void	double_quote_state(char *str, int *i);
 
 //builtins
 
@@ -72,7 +74,6 @@ void	create_export_list(t_shell *shell);
 
 // expansion
 void	is_expandable(t_shell *shell);
-void	merge_queue(t_shell *shell, t_token *token);
 //helping functions
 int		ft_double_strlen(char **str);
 char	*shell_strdup(t_shell *shell, const char *s1);
@@ -125,6 +126,5 @@ void	add_list(t_shell *shell, char *key, char *value);
 int		check_list(t_shell *shell, char *str, char *value);
 int		is_valid_syntax_var(t_shell *shell, char *str);
 void	split_after_expand(t_shell *shell);
-void	add_token_next(t_shell *shell, t_token *token, t_type type, char *str);
 void	delete_quotes(t_shell *shell);
 #endif

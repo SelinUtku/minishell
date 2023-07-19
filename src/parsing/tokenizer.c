@@ -6,123 +6,91 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 23:23:52 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/18 12:25:30 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/19 08:34:25 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	add_token_node(t_shell *shell, t_type type, char *str)
+void	define_type(t_shell *shell)
 {
-	t_token	*new;
-	t_token	*last;
+	int	i;
 
-	new = my_malloc(&shell->garbage, 1, sizeof(t_token));
-	new->type = type;
-	new->str = str;
-	if (shell->token == NULL)
+	i = 0;
+	while (shell->input[i] != '\0')
 	{
-		new->next = NULL;
-		shell->token = new;
-	}
-	else
-	{
-		last = shell->token;
-		while (last->next != NULL)
-			last = last->next;
-		new->next = NULL;
-		last->next = new;
-	}
-}
-
-void	add_token_next(t_shell *shell, t_token *token, t_type type, char *str)
-{
-	t_token	*new;
-	t_token	*temp;
-
-	new = my_malloc(&shell->garbage, 1, sizeof(t_token));
-	new->type = type;
-	new->str = str;
-	temp = token->next;
-	token->next = new;
-	new->next = temp;
-}
-
-void	examine_type(t_shell *shell)
-{
-	while (shell->input[shell->i] != '\0')
-	{
-		if (is_input_redirection(shell))
+		if (is_input_redirection(shell, &i))
 			;
-		else if (is_output_redirection(shell))
+		else if (is_output_redirection(shell, &i))
 			;
-		else if (is_heredoc(shell))
+		else if (is_heredoc(shell, &i))
 			;
-		else if (is_output_redirection_append(shell))
+		else if (is_output_redirection_append(shell, &i))
 			;
-		else if (is_pipe(shell))
+		else if (is_pipe(shell, &i))
 			;
-		else if (is_word(shell))
+		else if (is_word(shell, &i))
 			;
-		ft_isspace(shell);
+		ft_isspace(shell->input, &i);
 	}
 }
 
-bool	is_pipe(t_shell *shell)
+bool	is_pipe(t_shell *shell, int	*i)
 {
-	if (shell->input[shell->i] == '|')
+	if (shell->input[(*i)] == '|')
 	{
 		add_token_node(shell, PIPE, shell_strdup(shell, "|"));
-		shell->i++;
+		(*i)++;
 		return (true);
 	}
 	return (false);
 }
 
-void	ft_isspace(t_shell *shell)
+int	ft_isspace(char *str, int *i)
 {
-	while (shell->input[shell->i] == 32  && shell->input[shell->i] != '\0')
-		shell->i++;
+	while (str[(*i)] == 32 && str[(*i)] != '\0')
+		(*i)++;
+	return (*i);
 }
 
-bool	is_word(t_shell *shell)
+bool	is_word(t_shell *shell, int	*i)
 {
 	int		start;
 	char	*str;
 
-	if (ft_strchr(WORD_DELIMITERS, shell->input[shell->i]) == 0)
+	if (ft_strchr(WORD_DELIMITERS, shell->input[(*i)]) == 0)
 	{
-		start = shell->i;
-		while (ft_strchr(WORD_DELIMITERS, shell->input[shell->i]) == 0)
+		start = *i;
+		while (ft_strchr(WORD_DELIMITERS, shell->input[(*i)]) == 0)
 		{
-			if (shell->input[shell->i] == '\'')
-				s_quote_state(shell);
-			else if (shell->input[shell->i] == '\"')
-				d_quote_state(shell);
+			if (shell->input[(*i)] == '\'')
+				single_quote_state(shell->input, i);
+			else if (shell->input[(*i)] == '\"')
+				double_quote_state(shell->input, i);
 			else
-				shell->i++;
+				(*i)++;
 		}
-		str = shell_substr(shell, shell->input, start, shell->i - start);
+		str = shell_substr(shell, shell->input, start, (*i) - start);
 		add_token_node(shell, WORD, str);
 		return (true);
 	}
 	return (false);
 }
 
-void	s_quote_state(t_shell *shell)
+void	single_quote_state(char *str, int *i)
 {
-	shell->i++;
-	while (shell->input[shell->i] != '\'' && shell->input[shell->i] != '\0')
-		shell->i++;
-	if (shell->input[shell->i] == '\'')
-		shell->i++;
+	(*i)++;
+	while (str[(*i)] != '\'' && str[(*i)] != '\0')
+		(*i)++;
+	if (str[(*i)] == '\'')
+		(*i)++;
 }
 
-void	d_quote_state(t_shell *shell)
+void	double_quote_state(char *str, int *i)
 {
-	shell->i++;
-	while (shell->input[shell->i] != '\"' && shell->input[shell->i] != '\0')
-		shell->i++;
-	if (shell->input[shell->i] == '\"')
-		shell->i++;
+	(*i)++;
+	while (str[(*i)] != '\"' && str[(*i)] != '\0')
+		(*i)++;
+	if (str[(*i)] == '\"')
+		(*i)++;
 }

@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/18 12:21:12 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/19 08:35:11 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	leaks(void)
 
 void	init_shell_struct(t_shell *shell)
 {
-	shell->i = 0;
 	shell->token = NULL;
 	shell->front = NULL;
 	shell->rear = NULL;
@@ -116,7 +115,7 @@ int	get_input(char **env)
 		if (shell->input == NULL || shell->input[0] == EOF)
 			exit(shell->status);
 		add_history(shell->input);
-		examine_type(shell);
+		define_type(shell);
 		// print_token(shell->token);
 		exec_order(shell);
 		is_expandable(shell);
