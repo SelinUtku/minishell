@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 03:25:05 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/19 08:57:15 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/20 21:47:49 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,5 +229,3 @@ void	split_after_expand(t_shell *shell)
 		temp_token = temp_token->next;
 	}
 }
-
-

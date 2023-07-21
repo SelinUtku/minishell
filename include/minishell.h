@@ -127,4 +127,5 @@ int		check_list(t_shell *shell, char *str, char *value);
 int		is_valid_syntax_var(t_shell *shell, char *str);
 void	split_after_expand(t_shell *shell);
 void	delete_quotes(t_shell *shell);
+void	handle_sigint(int sig);
 #endif

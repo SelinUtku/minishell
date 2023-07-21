@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/19 07:55:03 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/20 22:05:14 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ typedef struct s_token
 {
 	t_type			type;
 	int				index;
-	struct s_token	*next;
 	char			*str;
+	struct s_token	*next;
 }t_token;
 
 typedef struct s_export

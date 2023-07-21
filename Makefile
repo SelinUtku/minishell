@@ -17,7 +17,7 @@ MAIN_SRC	= src/main/main.c src/garbage_collector/add_to_garbage.c src/garbage_co
 			src/garbage_collector/my_malloc.c src/execution/priority.c help_function.c \
 			src/expansion/expand_new.c src/execution/clean_up.c src/execution/exec.c \
 			src/execution/file_redirections.c src/execution/get_paths.c src/execution/exec_builtin.c heredoc.c \
-			src/expansion/remove_quotes.c
+			src/expansion/remove_quotes.c src/signals/signal.c
 
 
 PARSE_SRC	=	src/parsing/heredoc.c \

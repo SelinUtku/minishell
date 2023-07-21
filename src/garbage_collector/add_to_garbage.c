@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 04:46:40 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/06 04:46:50 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/20 22:35:56 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	add_garbage(t_garbage **first, void *ptr)
 	if (!new)
 	{
 		perror("malloc fail");
+		clean_garbage(first);
 		exit (EXIT_FAILURE);
 	}
 	new->ptr = ptr;
