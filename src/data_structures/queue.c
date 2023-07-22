@@ -6,23 +6,18 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 23:47:24 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/13 02:58:01 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 04:45:44 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	enqueue(t_queue **front, t_queue **rear, void *ptr)
+void	enqueue(t_shell *shell, t_queue **front, t_queue **rear, void *ptr)
 {
 	t_queue	*new;
 
 	new = NULL;
-	new = (t_queue *)malloc(sizeof(t_queue));
-	if (!new)
-	{
-		perror ("malloc");
-		exit (EXIT_FAILURE);
-	}
+	new = (t_queue *)my_malloc(&shell->garbage, 1, sizeof(t_queue));
 	new->content = ptr;
 	new->next = NULL;
 	if (*front == NULL)
@@ -37,7 +32,7 @@ void	enqueue(t_queue **front, t_queue **rear, void *ptr)
 	}
 }
 
-void	dequeue(t_queue **front)
+void	dequeue(t_shell *shell, t_queue **front)
 {
 	t_queue	*temp;
 
@@ -45,7 +40,8 @@ void	dequeue(t_queue **front)
 	{
 		temp = *front;
 		*front = (*front)->next;
-		free(temp);
+		del_one_from_garbage(&shell->garbage, temp->content);
+		del_one_from_garbage(&shell->garbage, temp);
 	}
 	else
 		ft_putstr_fd("Queue is empty.\n", 2);

@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 04:47:09 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/06 04:47:47 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/21 06:14:50 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	del_node(t_garbage *del)
 {
 	if (del->ptr)
 		free(del->ptr);
+	del->ptr = NULL;
 	free(del);
 	del = NULL;
 }

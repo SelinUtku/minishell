@@ -8,26 +8,11 @@ void	exec_order(t_shell *shell)
 	if (temp && temp->type == PIPE)
 	{
 		temp->type = SYNTAX_ERROR;
-		ft_putendl_fd("Minishell: syntax error near unexpected token `|'", 2);
+		error_printer(SYNTAX_ERR_MSG, "|", "'");
 		return ;
 	}
 	if (order_heredoc(shell, temp) == false)
 		return ;
-	while (temp)
-	{
-		order_redirections(shell, temp);
-		while (temp && temp->type != 6)
-		{
-			if (temp->type == 7)
-				enqueue(&shell->front, &shell->rear, temp);
-			temp = temp->next;
-		}
-		if (temp)
-		{
-			enqueue(&shell->front, &shell->rear, temp);
-			temp = temp->next;
-		}
-	}
 }
 
 bool	order_heredoc(t_shell *shell, t_token *token)
@@ -41,33 +26,16 @@ bool	order_heredoc(t_shell *shell, t_token *token)
 			return (false);
 		if (temp->type == 0)
 		{
-			enqueue(&shell->front, &shell->rear, temp);
-			// enqueue(&shell->front, &shell->rear, shell_strdup(temp->str), temp->type);
+			enqueue(shell, &shell->front, &shell->rear, temp);
 			temp = temp->next;
-			temp->type = 4;
-			enqueue(&shell->front, &shell->rear, temp);
+			temp->type = DELIMITER;
+			if (ft_strchr(temp->str, '\'') || ft_strchr(temp->str, '\"'))
+				temp->type = Q_DELIMITER;
+			enqueue(shell, &shell->front, &shell->rear, temp);
 		}
 		temp = temp->next;
 	}
 	return (true);
-}
-
-void	order_redirections(t_shell *shell, t_token *token)
-{
-	t_token	*temp;
-
-	temp = token;
-	while (temp && temp->type != 6)
-	{
-		if (temp->type >= 1 && temp->type <= 3)
-		{
-			enqueue(&shell->front, &shell->rear, temp);
-			temp = temp->next;
-			temp->type = 5;
-			enqueue(&shell->front, &shell->rear, temp);
-		}
-		temp = temp->next;
-	}
 }
 
 bool	is_syntax_error(t_shell *shell, t_token *token)
@@ -77,7 +45,7 @@ bool	is_syntax_error(t_shell *shell, t_token *token)
 		if (token->next == NULL || token->next->type == PIPE)
 		{
 			token->type = SYNTAX_ERROR;
-			ft_putendl_fd("Minishell: syntax error near unexpected token `|'", 2);
+			error_printer(SYNTAX_ERR_MSG, "|", "'");
 			return (true);
 		}
 	}
@@ -87,16 +55,13 @@ bool	is_syntax_error(t_shell *shell, t_token *token)
 		{
 			token->type = SYNTAX_ERROR;
 			if (token->next != NULL)
-			{
-				ft_putstr_fd("Minishell: ", 2);
-				ft_putstr_fd("syntax error near unexpected token `", 2);
-				ft_putstr_fd(token->next->str, 2);
-				ft_putendl_fd("'", 2);
-			}
+				error_printer(SYNTAX_ERR_MSG, token->next->str, "'");
 			else
-				ft_putendl_fd("Minishell: syntax error near unexpected token `newline'", 2);
+				error_printer(SYNTAX_ERR_MSG, "newline", "'");
 			return (true);
 		}
+		else
+			token->next->type = FILENAME;
 	}
 	return (false);
 }

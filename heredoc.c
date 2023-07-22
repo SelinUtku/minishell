@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 03:27:52 by sutku             #+#    #+#             */
-/*   Updated: 2023/07/18 08:37:31 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 04:39:47 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,6 @@ char	*heredoc_file_name(t_shell *shell, int counter)
 	return (file_name);
 }
 
-char	*merge_expanded_words(t_shell *shell)
-{
-	char	*temp;
-
-	if (shell->exp_front)
-	{
-		temp = shell_strdup(shell, shell->exp_front->content);
-		dequeue(&shell->exp_front);
-	}
-	while (shell->exp_front)
-	{
-		temp = shell_strjoin(shell, temp, shell->exp_front->content);
-		dequeue(&shell->exp_front);
-	}
-	return (temp);
-}
-
 void	heredoc_expand(t_shell *shell, char *str, t_type type)
 {
 	int	start;
@@ -84,16 +67,16 @@ void	heredoc_expand(t_shell *shell, char *str, t_type type)
 		if (str[*i] == '$')
 		{
 			if (*i != start)
-				enqueue(&shell->exp_front, &shell->exp_rear, \
+				enqueue(shell, &shell->exp_front, &shell->exp_rear, \
 				shell_substr(shell, str, start, *i - start));
-			dollar_func(shell, str, i);
+			if_dollar_sign(shell, str, i);
 			start = (*i);
 			(*i)--;
 		}
 		(*i)++;
 	}
 	if (*i != start)
-		enqueue(&shell->exp_front, &shell->exp_rear, \
+		enqueue(shell, &shell->exp_front, &shell->exp_rear, \
 		shell_substr(shell, str, start, *i - start));
 }
 
@@ -126,7 +109,7 @@ int	execute_heredoc(t_shell *shell, t_token *temp_token, int fd)
 	{
 		heredoc_expand(shell, str, temp_token->type);
 		free(str);
-		ft_putstr_fd(merge_expanded_words(shell), fd);
+		ft_putstr_fd(merge_queue(shell, temp_token), fd);
 	}
 	return (1);
 }

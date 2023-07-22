@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/21 03:43:27 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 04:09:53 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	check_syntax_error(t_shell *shell)
 
 int	main(int argc, char **argv, char **env)
 {
-	if (argc != 1)
+	if (argc != 1 && argv)
 	{
 		write (2, "Minishell does not take any arguments\n", 39);
 		return (1);
@@ -60,12 +60,12 @@ void	print_order(t_queue **front)
 
 	temp = *front;
 	printf("EXEC ORDER\n");
-	while (*front && (*front)->content)
+	while (temp && temp->content)
 	{
 		printf("Token Type : %d ", ((t_token *)(*front)->content)->type);
 		printf("Token String : %s\n", ((t_token *)(*front)->content)->str);
-		dequeue(front);
-		// temp = temp->next;
+		// dequeue(front);
+		temp = temp->next;
 	}
 }
 void	leaks(void)
@@ -84,8 +84,6 @@ void	init_shell_struct(t_shell *shell)
 
 int	get_input(char **env)
 {
-	char	*input;
-	char	*back_up;
 	t_shell	*shell;
 
 	// atexit(&leaks);
@@ -101,10 +99,9 @@ int	get_input(char **env)
 	while (1)
 	{
 		init_shell_struct(shell);
-		// signal(SIGINT, handle_sigint);
-		// signal(SIGQUIT, SIG_IGN);
+		signals(shell);
 		if (isatty(fileno(stdin)))
-			shell->input = readline("MinisHell$ ");
+			shell->input = readline(YELLOW"MinisHell$ "RESETCOLOR);
 		else
 		{
 			char *line;
@@ -147,6 +144,7 @@ int	get_input(char **env)
 				pipex(shell, shell->my_env);
 		}
 		unlink_heredocs(shell);
+		
 		// print_token(shell->token);
 		free(shell->input);
 	}

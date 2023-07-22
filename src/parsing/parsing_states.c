@@ -1,24 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
+/*   parsing_states.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/05 23:35:43 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/19 07:14:29 by Cutku            ###   ########.fr       */
+/*   Created: 2023/07/21 03:52:35 by Cutku             #+#    #+#             */
+/*   Updated: 2023/07/21 09:34:56 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-bool	is_heredoc(t_shell *shell, int *i)
+void	single_quote_state(char *str, int *i)
 {
-	if (shell->input[(*i)] == '<' && shell->input[(*i) + 1] == '<')
-	{
-		add_token_node(shell, HEREDOC, shell_strdup(shell, "<<"));
-		(*i) += 2;
-		return (true);
-	}
-	return (false);
+	(*i)++;
+	while (str[(*i)] != '\'' && str[(*i)] != '\0')
+		(*i)++;
+	if (str[(*i)] == '\'')
+		(*i)++;
+}
+
+void	double_quote_state(char *str, int *i)
+{
+	(*i)++;
+	while (str[(*i)] != '\"' && str[(*i)] != '\0')
+		(*i)++;
+	if (str[(*i)] == '\"')
+		(*i)++;
+}
+
+void	skip_spaces(char *str, int *i)
+{
+	while (ft_isspace(str[*i]) && str[*i] != '\0')
+		(*i)++;
 }

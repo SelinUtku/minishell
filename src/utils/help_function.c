@@ -6,11 +6,11 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/24 04:41:12 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/14 10:40:16 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 05:08:51 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "include/minishell.h"
+#include "../../include/minishell.h"
 
 int	ft_double_strlen(char **str)
 {
@@ -77,4 +77,11 @@ char	*shell_substr(t_shell *shell, char const *s, int start, int len)
 	}
 	ptr[i] = '\0';
 	return (ptr);
+}
+
+int	ft_isspace(char	a)
+{
+	if (a == 32 || a == 9 || a == 10)
+		return (1);
+	return (0);
 }

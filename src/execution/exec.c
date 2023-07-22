@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 02:25:13 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/21 03:43:32 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/21 23:25:58 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,8 +168,7 @@ void	exec_child_process(t_shell *shell,t_pipex *pipex, int i)
 
 	if (pipex->pid[i] == 0)
 	{
-		// signal(SIGINT, SIG_DFL);
-		// signal(SIGQUIT, SIG_DFL);
+		signals_child(shell);
 		child = find_right_token(shell, i);
 		if (pipex->num_commands != 1)
 		{

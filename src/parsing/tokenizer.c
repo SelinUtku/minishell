@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 23:23:52 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/19 08:34:25 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/21 09:37:12 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	define_type(t_shell *shell)
 			;
 		else if (is_word(shell, &i))
 			;
-		ft_isspace(shell->input, &i);
+		skip_spaces(shell->input, &i);
 	}
 }
 
@@ -44,13 +44,6 @@ bool	is_pipe(t_shell *shell, int	*i)
 		return (true);
 	}
 	return (false);
-}
-
-int	ft_isspace(char *str, int *i)
-{
-	while (str[(*i)] == 32 && str[(*i)] != '\0')
-		(*i)++;
-	return (*i);
 }
 
 bool	is_word(t_shell *shell, int	*i)
@@ -75,22 +68,4 @@ bool	is_word(t_shell *shell, int	*i)
 		return (true);
 	}
 	return (false);
-}
-
-void	single_quote_state(char *str, int *i)
-{
-	(*i)++;
-	while (str[(*i)] != '\'' && str[(*i)] != '\0')
-		(*i)++;
-	if (str[(*i)] == '\'')
-		(*i)++;
-}
-
-void	double_quote_state(char *str, int *i)
-{
-	(*i)++;
-	while (str[(*i)] != '\"' && str[(*i)] != '\0')
-		(*i)++;
-	if (str[(*i)] == '\"')
-		(*i)++;
 }

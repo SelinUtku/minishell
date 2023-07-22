@@ -6,13 +6,13 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 04:15:51 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/06 04:45:31 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 04:32:26 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	merge_queue(t_shell *shell, t_token *token)
+char	*merge_queue(t_shell *shell, t_token *token)
 {
 	char		*temp;
 	char		*str;
@@ -23,7 +23,7 @@ void	merge_queue(t_shell *shell, t_token *token)
 	{
 		str = shell_strdup(shell, (shell->exp_front->content));
 		del_one_from_garbage(&shell->garbage, shell->exp_front->content);
-		dequeue(&shell->exp_front);
+		dequeue(shell, &shell->exp_front);
 	}
 	while (shell->exp_front)
 	{
@@ -31,8 +31,7 @@ void	merge_queue(t_shell *shell, t_token *token)
 		str = shell_strjoin(shell, temp, shell->exp_front->content);
 		del_one_from_garbage(&shell->garbage, temp);
 		del_one_from_garbage(&shell->garbage, shell->exp_front->content);
-		dequeue(&shell->exp_front);
+		dequeue(shell, &shell->exp_front);
 	}
-	del_one_from_garbage(&shell->garbage, token->str);
-	token->str = str;
+	return (str);
 }

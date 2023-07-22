@@ -25,15 +25,14 @@
 
 //garbage_collector
 void	*my_malloc(t_garbage **garbage, size_t count, size_t size);
-void	add_garbage(t_garbage **first, void *ptr);
+void	add_to_garbage(t_garbage **first, void *ptr);
 void	del_one_from_garbage(t_garbage **first, void *ptr);
 void	clean_garbage(t_garbage **first);
 void	del_node(t_garbage *del);
-void	free_double_from_garbage(t_garbage **garbage, char **ptr);
 
 //Parsing
 void	define_type(t_shell *shell);
-int		ft_isspace(char *str, int *i);
+void	skip_spaces(char *str, int *i);
 bool	is_pipe(t_shell *shell, int	*i);
 bool	is_word(t_shell *shell, int	*i);
 bool	is_output_redirection(t_shell *shell, int *i);
@@ -41,22 +40,41 @@ bool	is_input_redirection(t_shell *shell, int *i);
 bool	is_output_redirection_append(t_shell *shell, int *i);
 bool	is_heredoc(t_shell *shell, int *i);
 
+
+
 //data_structures
 void	add_token_node(t_shell *shell, t_type type, char *str);
 void	add_token_next(t_shell *shell, t_token *token, t_type type, char *str);
-void	merge_queue(t_shell *shell, t_token *token);
+char	*merge_queue(t_shell *shell, t_token *token);
 //main
 int		get_input(char **env);
 
 void	single_quote_state(char *str, int *i);
 void	double_quote_state(char *str, int *i);
 
+// expansion
+void	is_expandable(t_shell *shell);
+void	s_quote_expand(t_shell *shell, char *str, int *i);
+void	d_quote_expand(t_shell *shell, char *str, int *i, t_type *type);
+void	non_quote_expand(t_shell *shell, char *str, int *i, t_type *type);
+void	if_dollar_sign(t_shell *shell, char *str, int *i);
+char	*value_of_expandable(t_shell *shell, char *var);
+void	exit_code_expand(t_shell *shell, char *str, int *i);
+void	variable_expand(t_shell *shell, char *str, int *i, int len_variable);
+void	quote_removal(t_shell *shell, char *str, int *i);
+void	non_quote_last(t_shell *shell, char *str, int *i);
+void	delete_quotes(t_shell *shell);
+void	split_after_expand(t_shell *shell);
+int		count_words(char *str);
+void	extract_words(char *str, int *i);
+t_token	*process_token(t_shell *shell, t_token *token);
+
 //builtins
 
 void	create_env(t_shell *shell, char **env);
 void	ft_env(t_shell *shell, char **str);
 int		ft_getenv(char **str, char *var);
-char	*value_of_expandable(t_shell *shell, char *var);
+
 void	ft_pwd(t_shell *shell);
 void	ft_cd(t_shell *shell, char *path);
 void	ft_exit(t_shell *shell, char **str);
@@ -72,8 +90,6 @@ void	del_one_list(t_shell *shell, char *key);
 void	print_export_list(t_shell *shell);
 void	create_export_list(t_shell *shell);
 
-// expansion
-void	is_expandable(t_shell *shell);
 //helping functions
 int		ft_double_strlen(char **str);
 char	*shell_strdup(t_shell *shell, const char *s1);
@@ -117,15 +133,19 @@ void	ft_echo(t_shell *shell, char **str);
 void	exec_builtin(t_shell *shell, char **str, t_pipex *pipex);
 int		is_builtin(char *str);
 void	here_doc(t_shell *shell);
-void	dollar_func(t_shell *shell, char *str, int *i);
 void	unlink_heredocs(t_shell *shell);
 int		ft_strcmp(char *str1, char *str2);
 void	error_not_valid_identifier(t_shell *shell, char *str1, char *str2);
 void	error_invalid_option(t_shell *shell, char **str);
 void	add_list(t_shell *shell, char *key, char *value);
-int		check_list(t_shell *shell, char *str, char *value);
+bool	check_export_list(t_shell *shell, char *str);
 int		is_valid_syntax_var(t_shell *shell, char *str);
 void	split_after_expand(t_shell *shell);
 void	delete_quotes(t_shell *shell);
-void	handle_sigint(int sig);
+void	error_printer(char *str1, char *str2, char *str3);
+int		ft_isspace(char	a);
+void	signals(t_shell *shell);
+void	signals_child(t_shell *shell);
+void	update_export_list(t_shell *shell, char *key, char *value);
+void	setup_termios(t_shell *shell);
 #endif

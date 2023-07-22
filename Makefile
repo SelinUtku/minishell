@@ -13,16 +13,28 @@ WHITE = \033[0;97m
 
 # USER		= $(shell whoami)
 
-MAIN_SRC	= src/main/main.c src/garbage_collector/add_to_garbage.c src/garbage_collector/del_from_garbage.c \
-			src/garbage_collector/my_malloc.c src/execution/priority.c help_function.c \
-			src/expansion/expand_new.c src/execution/clean_up.c src/execution/exec.c \
-			src/execution/file_redirections.c src/execution/get_paths.c src/execution/exec_builtin.c heredoc.c \
-			src/expansion/remove_quotes.c src/signals/signal.c
+MAIN_SRC	=	src/main/main.c  src/execution/priority.c \
+			src/execution/clean_up.c src/execution/exec.c \
+			src/execution/file_redirections.c src/execution/get_paths.c \
+			src/execution/exec_builtin.c heredoc.c \
+			src/signals/signal.c
+MAIN_OBJ	=	$(MAIN_SRC:.c=.o)
 
+GARBAGE_SRC	=	src/garbage_collector/add_to_garbage.c \
+				src/garbage_collector/del_from_garbage.c \
+				src/garbage_collector/my_malloc.c
+GARBAGE_OBJ =	$(GARBAGE_SRC:.c=.o)
 
-PARSE_SRC	=	src/parsing/heredoc.c \
+PARSE_SRC	=	src/parsing/parsing_states.c \
 				src/parsing/redirections.c \
 				src/parsing/tokenizer.c
+PARSE_OBJ	=	$(PARSE_SRC:.c=.o)
+
+EXPAND_SRC	=	src/expansion/expand.c \
+				src/expansion/remove_quotes.c \
+				src/expansion/expansion_states.c \
+				src/expansion/split_after_expand.c
+EXPAND_OBJ	=	$(EXPAND_SRC:.c=.o)
 
 BUILTIN_SRC	=	src/builtins/cd.c src/builtins/env.c src/builtins/exit.c src/builtins/export/export.c src/builtins/unset.c \
 				src/builtins/echo.c src/builtins/pwd.c src/builtins/export/export_list.c
@@ -33,8 +45,12 @@ DATA_ST_SRC =	src/data_structures/linked_list.c \
 				src/data_structures/merge_queue.c
 DATA_ST_OBJ	=	$(DATA_ST_SRC:.c=.o)
 
-MAIN_OBJ	= $(MAIN_SRC:.c=.o)
-PARSE_OBJ	= $(PARSE_SRC:.c=.o)
+UTILS_SRC	=	src/utils/error_messages.c \
+				src/utils/help_function.c
+UTILS_OBJ	=	$(UTILS_SRC:.c=.o)
+
+ENV_OP_SRC	=	src/environment_operations/environment_operations.c
+ENV_OP_OBJ	=	$(ENV_OP_SRC:.c=.o)
 
 INCL_RDL_HEADER	= -I /Users/$(USER)/.brew/opt/readline/include
 INCL_RDL_LIB	= -L /Users/$(USER)/.brew/opt/readline/lib
@@ -55,8 +71,9 @@ $(LIBFT_LIB):
 	make bonus -C $(LIBFT) && make clean -C $(LIBFT)
 	echo "$(GREEN)Libft compiled successfully!$(DEF_COLOR)"
 
-$(NAME): $(LIBFT_LIB) $(MAIN_OBJ) $(PARSE_OBJ) $(BUILTIN_OBJ) $(DATA_ST_OBJ)
-	$(CC) $(CFLAGS) $(PARSE_OBJ) $(BUILTIN_OBJ) $(DATA_ST_OBJ) $(MAIN_OBJ) $(LIBFT_LIB) $(INCL_RDL_LIB) $(READLINE_LIB) -o $(NAME)
+$(NAME): $(LIBFT_LIB) $(MAIN_OBJ) $(PARSE_OBJ) $(BUILTIN_OBJ) $(DATA_ST_OBJ) $(GARBAGE_OBJ) $(EXPAND_OBJ) $(UTILS_OBJ) $(ENV_OP_OBJ)
+	$(CC) $(CFLAGS) $(PARSE_OBJ) $(BUILTIN_OBJ) $(DATA_ST_OBJ) $(GARBAGE_OBJ) $(MAIN_OBJ) $(LIBFT_LIB) \
+	$(INCL_RDL_LIB) $(READLINE_LIB) $(EXPAND_OBJ) $(UTILS_OBJ) $(ENV_OP_OBJ) -o $(NAME)
 	echo "$(GREEN)Minishell compiled successfully!$(DEF_COLOR)"
 
 clean:
@@ -64,6 +81,10 @@ clean:
 	$(RM) $(PARSE_OBJ)
 	$(RM) $(BUILTIN_OBJ)
 	$(RM) $(DATA_ST_OBJ)
+	$(RM) $(GARBAGE_OBJ)
+	$(RM) $(EXPAND_OBJ)
+	$(RM) $(UTILS_OBJ)
+	$(RM) $(ENV_OP_OBJ)
 
 fclean: clean
 	make fclean -C $(LIBFT)

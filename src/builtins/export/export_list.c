@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 08:16:34 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/14 10:56:13 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 09:16:51 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	del_one_list(t_shell *shell, char *key)
 
 	del = shell->export_list;
 	prev = NULL;
-	if (ft_strcmp(shell->export_list->key, key) == 0)
+	if (del && ft_strcmp(shell->export_list->key, key) == 0)
 	{
 		shell->export_list = shell->export_list->next;
 		del_node_from_list(shell, del);
@@ -84,41 +84,33 @@ void	create_export_list(t_shell *shell)
 	}
 }
 
-void	print_export_list(t_shell *shell)
-{
-	t_export	*temp;
-
-	temp = shell->export_list;
-	while (temp)
-	{
-		ft_putstr_fd("declare - x ", 1);
-		ft_putstr_fd(temp->key, 1);
-		if (temp->value)
-		{
-			ft_putchar_fd('=', 1);
-			ft_putchar_fd('\"', 1);
-			ft_putstr_fd(temp->value, 1);
-			ft_putchar_fd('\"', 1);
-		}
-		ft_putchar_fd('\n', 1);
-		temp = temp->next;
-	}
-}
-
-int	check_list(t_shell *shell, char *str, char *value)
+void	update_export_list(t_shell *shell, char *key, char *value)
 {
 	t_export	*temp;
 
 	temp = shell->export_list;
 	while (temp && temp->key)
 	{
-		if (ft_strcmp(temp->key, str) == 0)
+		if (ft_strcmp(temp->key, key) == 0)
 		{
-			//free temp->value needed
-			temp->value = value;
-			return (0);
+			if (temp->value != NULL)
+				del_one_from_garbage(&shell->garbage, temp->value);
+			temp->value = value ;
 		}
 		temp = temp->next;
 	}
-	return (1);
+}
+
+bool	check_export_list(t_shell *shell, char *key)
+{
+	t_export	*temp;
+
+	temp = shell->export_list;
+	while (temp && temp->key)
+	{
+		if (ft_strcmp(temp->key, key) == 0)
+			return (true);
+		temp = temp->next;
+	}
+	return (false);
 }

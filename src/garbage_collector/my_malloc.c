@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 04:48:26 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/06 04:48:36 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/21 04:00:39 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@ void	*my_malloc(t_garbage **garbage, size_t count, size_t size)
 		clean_garbage(garbage);
 		exit (EXIT_FAILURE);
 	}
-	add_garbage(garbage, ptr);
+	add_to_garbage(garbage, ptr);
 	return (ptr);
 }

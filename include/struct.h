@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/20 22:05:14 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/21 23:05:05 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@
 # define STRUCT_H
 # define SYMBOLS "<>|"
 # define WORD_DELIMITERS "<>| \0"
+
+
+# define SYNTAX_ERR_MSG	"Minishell: syntax error near unexpected token `"
+# define BLUE "\033[38;5;36m"
+# define RED "\033[0;31m"
+# define YELLOW "\033[0;33m"
+# define RESETCOLOR "\033[0m"
 
 typedef struct s_garbage
 {
@@ -79,6 +86,8 @@ typedef struct s_shell
 	int			num_heredoc;
 	char		*input;
 	char		**my_env;
+	struct termios termios;
+	struct termios	saved_termios;
 	t_garbage	*garbage;
 	t_token		*token;
 	t_queue		*front;
@@ -89,8 +98,8 @@ typedef struct s_shell
 }	t_shell;
 
 
-void	enqueue(t_queue **front, t_queue **rear, void *ptr);
-void	dequeue(t_queue **front);
+void	enqueue(t_shell *shell, t_queue **front, t_queue **rear, void *ptr);
+void	dequeue(t_shell *shell, t_queue **front);
 void	exec_order(t_shell *shell);
 bool	order_heredoc(t_shell *shell, t_token *token);
 void	order_redirections(t_shell *shell, t_token *token);

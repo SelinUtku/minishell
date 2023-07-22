@@ -6,13 +6,13 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 04:46:40 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/20 22:35:56 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/21 03:59:52 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	add_garbage(t_garbage **first, void *ptr)
+void	add_to_garbage(t_garbage **first, void *ptr)
 {
 	t_garbage	*new;
 	t_garbage	*last;

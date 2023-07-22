@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 23:37:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/19 07:55:46 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/21 03:56:41 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,17 @@ bool	is_output_redirection_append(t_shell *shell, int *i)
 	if (shell->input[(*i)] == '>' && shell->input[(*i) + 1] == '>')
 	{
 		add_token_node(shell, OUTPUT_R_APPEND, shell_strdup(shell, ">>"));
+		(*i) += 2;
+		return (true);
+	}
+	return (false);
+}
+
+bool	is_heredoc(t_shell *shell, int *i)
+{
+	if (shell->input[(*i)] == '<' && shell->input[(*i) + 1] == '<')
+	{
+		add_token_node(shell, HEREDOC, shell_strdup(shell, "<<"));
 		(*i) += 2;
 		return (true);
 	}
