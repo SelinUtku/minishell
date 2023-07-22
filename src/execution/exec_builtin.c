@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 02:29:53 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 00:23:35 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 22:04:06 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	which_builtin(t_shell *shell, char **str)
 		else if(!ft_strcmp(*str, "env"))
 			ft_env(shell, str);
 		else if(!ft_strcmp(*str, "pwd"))
-			ft_pwd(shell);
+			ft_pwd(shell, str);
 		else
 			return (1);
 		return (0);

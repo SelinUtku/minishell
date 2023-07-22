@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 02:25:13 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/21 23:25:58 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 17:44:49 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,12 +148,12 @@ void	handle_redirections(t_shell *shell, t_token *blaa)
 		else if (child->type == OUTPUT_R)
 		{
 			fd = open_file(child->next->str, OUTPUT_R);
-			output_dup3(fd);
+			output_dup2(fd);
 			close(fd);
 		}
 		else if (child->type == OUTPUT_R_APPEND)
 		{
-			fd = open_file(child->next->str, OUTPUT_R);
+			fd = open_file(child->next->str, OUTPUT_R_APPEND);
 			output_dup2(fd);
 			close(fd);
 		}
@@ -168,7 +168,7 @@ void	exec_child_process(t_shell *shell,t_pipex *pipex, int i)
 
 	if (pipex->pid[i] == 0)
 	{
-		signals_child(shell);
+		// signals_child(shell);
 		child = find_right_token(shell, i);
 		if (pipex->num_commands != 1)
 		{

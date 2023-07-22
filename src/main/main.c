@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 04:09:53 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 23:21:32 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,9 @@ int	get_input(char **env)
 	while (1)
 	{
 		init_shell_struct(shell);
-		signals(shell);
+		// signals(shell);
 		if (isatty(fileno(stdin)))
-			shell->input = readline(YELLOW"MinisHell$ "RESETCOLOR);
+			shell->input = readline("MinisHell$ ");
 		else
 		{
 			char *line;
@@ -144,7 +144,6 @@ int	get_input(char **env)
 				pipex(shell, shell->my_env);
 		}
 		unlink_heredocs(shell);
-		
 		// print_token(shell->token);
 		free(shell->input);
 	}

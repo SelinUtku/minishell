@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 03:55:30 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 07:42:27 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 22:05:27 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_unset(t_shell *shell, char **str)
 	int	j;
 
 	shell->status = 0;
-	if (str[1] && str[1][0] == '-')
+	if (str[1] && str[1][0] == '-' && str[1][1])
 	{
 		error_invalid_option(shell, str);
 		return ;

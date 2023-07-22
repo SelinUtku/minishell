@@ -42,6 +42,7 @@ bool	is_heredoc(t_shell *shell, int *i);
 
 
 
+
 //data_structures
 void	add_token_node(t_shell *shell, t_type type, char *str);
 void	add_token_next(t_shell *shell, t_token *token, t_type type, char *str);
@@ -65,30 +66,45 @@ void	quote_removal(t_shell *shell, char *str, int *i);
 void	non_quote_last(t_shell *shell, char *str, int *i);
 void	delete_quotes(t_shell *shell);
 void	split_after_expand(t_shell *shell);
-int		count_words(char *str);
-void	extract_words(char *str, int *i);
-t_token	*process_token(t_shell *shell, t_token *token);
+int		extract_words(char *str, int *i);
+t_token	*process_token(t_shell *shell, t_token *token, char *str, bool first);
 
-//builtins
-
-void	create_env(t_shell *shell, char **env);
-void	ft_env(t_shell *shell, char **str);
-int		ft_getenv(char **str, char *var);
-
-void	ft_pwd(t_shell *shell);
+/*********BUILTINS*********/
+//export.c
+void		ft_export(t_shell *shell, char **str);
+void		del_node_from_export(t_shell *shell, t_export *del);
+void		del_one_from_export(t_shell *shell, char *key);
+void		print_export_list(t_shell *shell);
+void		create_export_list(t_shell *shell);
+void		update_export_list(t_shell *shell, char *key, char *value);
+t_export	*check_export_list(t_shell *shell, char *str);
+void		add_to_export(t_shell *shell, char *key, char *value);
+//cd.c
 void	ft_cd(t_shell *shell, char *path);
-void	ft_exit(t_shell *shell, char **str);
 void	update_oldpwd(t_shell *shell);
-void	ft_export(t_shell *shell, char **str);
+//echo.c
+void	ft_echo(t_shell *shell, char **str);
+int		check_echo_flag(char *str);
+//env.c
+void	ft_env(t_shell *shell, char **str);
+void	create_env(t_shell *shell, char **env);
+int		ft_getenv(char **str, char *var);
+//exit.c
+void	ft_exit(t_shell *shell, char **str);
+void	free_shell(t_shell *shell);
+void	exit_non_numeric(t_shell *shell, char **str);
+void	exit_no_arg(t_shell *shell);
+//pwd.c
+void	ft_pwd(t_shell *shell, char **str);
+//unset.c
+void	ft_unset(t_shell *shell, char **str);
+int		is_valid_syntax_var(t_shell *shell, char *str);
+
 void	update_env_var(t_shell *shell, char *var, char *value);
 void	add_env_var(t_shell *shell, char *var, char *value);
 void	append_env_var(t_shell *shell, char *var, char *value);
 void	delete_env_var(t_shell *shell, char *var);
-void	ft_unset(t_shell *shell, char **str);
-void	del_node_from_list(t_shell *shell, t_export *del);
-void	del_one_list(t_shell *shell, char *key);
-void	print_export_list(t_shell *shell);
-void	create_export_list(t_shell *shell);
+
 
 //helping functions
 int		ft_double_strlen(char **str);
@@ -129,7 +145,6 @@ void	free_pipex(t_pipex *pipex);
 void	input_dup2(int input);
 void	output_dup2(int output);
 int		which_builtin(t_shell *shell, char **str);
-void	ft_echo(t_shell *shell, char **str);
 void	exec_builtin(t_shell *shell, char **str, t_pipex *pipex);
 int		is_builtin(char *str);
 void	here_doc(t_shell *shell);
@@ -137,15 +152,14 @@ void	unlink_heredocs(t_shell *shell);
 int		ft_strcmp(char *str1, char *str2);
 void	error_not_valid_identifier(t_shell *shell, char *str1, char *str2);
 void	error_invalid_option(t_shell *shell, char **str);
-void	add_list(t_shell *shell, char *key, char *value);
-bool	check_export_list(t_shell *shell, char *str);
-int		is_valid_syntax_var(t_shell *shell, char *str);
 void	split_after_expand(t_shell *shell);
 void	delete_quotes(t_shell *shell);
 void	error_printer(char *str1, char *str2, char *str3);
 int		ft_isspace(char	a);
 void	signals(t_shell *shell);
 void	signals_child(t_shell *shell);
-void	update_export_list(t_shell *shell, char *key, char *value);
+
 void	setup_termios(t_shell *shell);
+void	is_directory(t_pipex *pipex);
+void	error_permission(t_pipex *pipex);
 #endif

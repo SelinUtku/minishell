@@ -6,13 +6,13 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 08:16:34 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 09:16:51 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 22:45:38 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-void	add_list(t_shell *shell, char *key, char *value)
+void	add_to_export(t_shell *shell, char *key, char *value)
 {
 	t_export	*new;
 	t_export	*last;
@@ -32,7 +32,7 @@ void	add_list(t_shell *shell, char *key, char *value)
 	}
 }
 
-void	del_one_list(t_shell *shell, char *key)
+void	del_one_from_export(t_shell *shell, char *key)
 {
 	t_export	*prev;
 	t_export	*del;
@@ -42,7 +42,7 @@ void	del_one_list(t_shell *shell, char *key)
 	if (del && ft_strcmp(shell->export_list->key, key) == 0)
 	{
 		shell->export_list = shell->export_list->next;
-		del_node_from_list(shell, del);
+		del_node_from_export(shell, del);
 	}
 	else
 	{
@@ -51,7 +51,7 @@ void	del_one_list(t_shell *shell, char *key)
 			if (ft_strcmp(del->key, key) == 0)
 			{
 				prev->next = del->next;
-				del_node_from_list(shell, del);
+				del_node_from_export(shell, del);
 				break ;
 			}
 			prev = del;
@@ -60,7 +60,7 @@ void	del_one_list(t_shell *shell, char *key)
 	}
 }
 
-void	del_node_from_list(t_shell *shell, t_export *del)
+void	del_node_from_export(t_shell *shell, t_export *del)
 {
 	del_one_from_garbage(&shell->garbage, del->key);
 	if (del->value)
@@ -78,7 +78,7 @@ void	create_export_list(t_shell *shell)
 	while (shell->my_env && shell->my_env[i])
 	{
 		temp = ft_strchr(shell->my_env[i], '=');
-		add_list(shell, shell_substr(shell, shell->my_env[i], 0, \
+		add_to_export(shell, shell_substr(shell, shell->my_env[i], 0, \
 		temp - shell->my_env[i]), shell_strdup(shell, temp + 1));
 		i++;
 	}
@@ -96,12 +96,14 @@ void	update_export_list(t_shell *shell, char *key, char *value)
 			if (temp->value != NULL)
 				del_one_from_garbage(&shell->garbage, temp->value);
 			temp->value = value ;
+			del_one_from_garbage(&shell->garbage, key);
+			return ;
 		}
 		temp = temp->next;
 	}
 }
 
-bool	check_export_list(t_shell *shell, char *key)
+t_export	*check_export_list(t_shell *shell, char *key)
 {
 	t_export	*temp;
 
@@ -109,8 +111,8 @@ bool	check_export_list(t_shell *shell, char *key)
 	while (temp && temp->key)
 	{
 		if (ft_strcmp(temp->key, key) == 0)
-			return (true);
+			return (temp);
 		temp = temp->next;
 	}
-	return (false);
+	return (NULL);
 }

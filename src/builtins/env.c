@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:25:09 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 06:48:04 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 21:14:57 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,22 @@ void	ft_env(t_shell *shell, char **str)
 
 	if (ft_double_strlen(str) > 1)
 	{
-		ft_putstr_fd("env: ", 2);
-		ft_putstr_fd(str[1], 2);
-		ft_putendl_fd(": env no argument or no options", 2);
-		shell->status = 1;
+		if (str[1][0] == '-')
+		{
+			error_printer("env: ", "illegal option -- ", str[1]);
+			shell->status = 1;
+		}
+		else
+		{
+			error_printer("env: ", str[1], NO_FILE);
+			shell->status = 127;
+		}
 		return ;
 	}
 	i = 0;
 	while (shell->my_env != NULL && shell->my_env[i] != NULL)
 	{
-		ft_putendl_fd(shell->my_env[i], 1);
+		ft_putendl_fd(shell->my_env[i], STDOUT_FILENO);
 		i++;
 	}
 	shell->status = 0;

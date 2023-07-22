@@ -6,13 +6,11 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:51 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/18 11:53:00 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 21:07:14 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-int	check_echo_flag(char *str);
 
 void	ft_echo(t_shell *shell, char **str)
 {
@@ -45,7 +43,7 @@ int	check_echo_flag(char *str)
 	i = 0;
 	if (str && str[i] == '-' && str[i + 1] != '\0')
 	{
-		while(str[++i] != '\0')
+		while (str[++i] != '\0')
 		{
 			if (str[i] != 'n')
 				return (0);

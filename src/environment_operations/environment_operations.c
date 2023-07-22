@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/22 06:43:55 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 08:54:09 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 20:47:02 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	create_env(t_shell *shell, char **env)
 	shell->my_env[j] = NULL;
 }
 
-void	add_env_var(t_shell *shell, char *var, char *value)//export
+void	add_env_var(t_shell *shell, char *var, char *value)
 {
 	char	**temp;
 	int		i;
@@ -42,7 +42,7 @@ void	add_env_var(t_shell *shell, char *var, char *value)//export
 
 	temp = shell->my_env;
 	len = ft_double_strlen(temp);
-	shell->my_env = my_malloc(&shell->garbage, len + 2 , sizeof(char *));
+	shell->my_env = my_malloc(&shell->garbage, len + 2, sizeof(char *));
 	i = 0;
 	while (temp && temp[i])
 	{
@@ -51,8 +51,9 @@ void	add_env_var(t_shell *shell, char *var, char *value)//export
 	}
 	shell->my_env[i] = shell_strjoin(shell, var, value);
 	shell->my_env[i + 1] = NULL;
-	// free_double_from_garbage(&shell->garbage, temp); leak var.
-	// free(temp); // del one double pointer
+	del_one_from_garbage(&shell->garbage, var);
+	del_one_from_garbage(&shell->garbage, value);
+	del_one_from_garbage(&shell->garbage, temp);
 }
 
 void	update_env_var(t_shell *shell, char *var, char *value)
@@ -65,11 +66,13 @@ void	update_env_var(t_shell *shell, char *var, char *value)
 	{
 		temp = shell->my_env[index];
 		shell->my_env[index] = shell_strjoin(shell, var, value);
+		del_one_from_garbage(&shell->garbage, var);
+		del_one_from_garbage(&shell->garbage, value);
 		del_one_from_garbage(&shell->garbage, temp);
 	}
 }
 
-void	append_env_var(t_shell *shell, char *var, char *value)//export +=
+void	append_env_var(t_shell *shell, char *var, char *value)
 {
 	int		index;
 	char	*temp;
@@ -78,8 +81,10 @@ void	append_env_var(t_shell *shell, char *var, char *value)//export +=
 	if (index != -1)
 	{
 		temp = shell->my_env[index];
-		shell->my_env[index] = shell_strjoin(shell, shell->my_env[index], value);
+		shell->my_env[index] = shell_strjoin(shell, temp, value);
 		del_one_from_garbage(&shell->garbage, temp);
+		del_one_from_garbage(&shell->garbage, var);
+		del_one_from_garbage(&shell->garbage, value);
 	}
 }
 
@@ -93,7 +98,7 @@ void	delete_env_var(t_shell *shell, char *var)
 	temp = shell->my_env;
 	i = ft_double_strlen(temp);
 	index_var = ft_getenv(temp, var);
-	del_one_list(shell, var);
+	del_one_from_export(shell, var);
 	if (index_var != -1)
 	{
 		shell->my_env = my_malloc(&shell->garbage, i, sizeof(char *));

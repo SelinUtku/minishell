@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/21 23:05:05 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/22 21:38:50 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,13 @@
 
 
 # define SYNTAX_ERR_MSG	"Minishell: syntax error near unexpected token `"
-# define BLUE "\033[38;5;36m"
-# define RED "\033[0;31m"
-# define YELLOW "\033[0;33m"
-# define RESETCOLOR "\033[0m"
+# define NO_FILE		": No such file or directory"
+# define NO_PERM		": Permission denied"
+# define DIR_ERR		": is a directory"
+# define NO_CMD			": command not found"
+# define EXIT_NON_NUM	": numeric argument required"
+# define TOO_MNY_ARG	"too many arguments"
+
 
 typedef struct s_garbage
 {
