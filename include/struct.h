@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 07:32:26 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 22:47:37 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct s_shell
 {
 	int			status;
 	int			num_pipe;
+	int			term_fd[2];
 	int			num_heredoc;
 	char		*input;
 	char		**my_env;
@@ -98,9 +99,8 @@ typedef struct s_shell
 void	enqueue(t_shell *shell, t_queue **front, t_queue **rear, void *ptr);
 void	dequeue(t_shell *shell, t_queue **front);
 void	exec_order(t_shell *shell);
-bool	order_heredoc(t_shell *shell, t_token *token);
+bool	order_heredoc(t_shell *shell);
 void	order_redirections(t_shell *shell, t_token *token);
-bool	is_syntax_error(t_shell *shell, t_token *token);
+bool	is_syntax_error(t_token *token);
 
 #endif
-//num_pipe = 0 ve is bultin ise

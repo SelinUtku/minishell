@@ -13,12 +13,17 @@ WHITE = \033[0;97m
 
 # USER		= $(shell whoami)
 
-MAIN_SRC	=	src/main/main.c  src/execution/priority.c \
-			src/execution/clean_up.c src/execution/exec.c \
-			src/execution/file_redirections.c src/execution/get_paths.c \
-			src/execution/exec_builtin.c src/execution/heredoc/heredoc.c \
-			src/signals/signal.c src/execution/heredoc/heredoc_utils.c
+MAIN_SRC	=	src/main/main.c 
 MAIN_OBJ	=	$(MAIN_SRC:.c=.o)
+
+EXEC_SRC	=	src/execution/priority.c \
+				src/execution/clean_up.c src/execution/exec.c \
+				src/execution/file_redirections.c src/execution/get_paths.c \
+				src/execution/exec_builtin.c src/execution/heredoc/heredoc.c \
+				src/signals/signal.c src/execution/heredoc/heredoc_utils.c \
+				src/execution/exec_redirections.c src/execution/exec_utils.c \
+				src/execution/exec_error_messages.c
+EXEC_OBJ	=	$(EXEC_SRC:.c=.o)
 
 GARBAGE_SRC	=	src/garbage_collector/add_to_garbage.c \
 				src/garbage_collector/del_from_garbage.c \
@@ -62,9 +67,9 @@ READLINE_LIB	=	-lreadline
 LIBFT		= ./libft
 LIBFT_LIB	= ./libft/libft.a
 
-CC			= gcc -fsanitize=address -g
+CC			= cc #-fsanitize=address -g
 RM			= rm -f
-CFLAGS		= $(INCL_RDL_HEADER) #-Wall -Werror -Wextra
+CFLAGS		= $(INCL_RDL_HEADER) -Wall -Werror -Wextra
 
 NAME		= minishell
 
@@ -74,9 +79,9 @@ $(LIBFT_LIB):
 	make bonus -C $(LIBFT) && make clean -C $(LIBFT)
 	echo "$(GREEN)Libft compiled successfully!$(DEF_COLOR)"
 
-$(NAME): $(LIBFT_LIB) $(MAIN_OBJ) $(PARSE_OBJ) $(BUILTIN_OBJ) $(DATA_ST_OBJ) $(GARBAGE_OBJ) $(EXPAND_OBJ) $(UTILS_OBJ) $(ENV_OP_OBJ)
+$(NAME): $(LIBFT_LIB) $(MAIN_OBJ) $(PARSE_OBJ) $(BUILTIN_OBJ) $(DATA_ST_OBJ) $(GARBAGE_OBJ) $(EXPAND_OBJ) $(UTILS_OBJ) $(ENV_OP_OBJ) $(EXEC_OBJ)
 	$(CC) $(CFLAGS) $(PARSE_OBJ) $(BUILTIN_OBJ) $(DATA_ST_OBJ) $(GARBAGE_OBJ) $(MAIN_OBJ) $(LIBFT_LIB) \
-	$(INCL_RDL_LIB) $(READLINE_LIB) $(EXPAND_OBJ) $(UTILS_OBJ) $(ENV_OP_OBJ) -o $(NAME)
+	$(INCL_RDL_LIB) $(READLINE_LIB) $(EXPAND_OBJ) $(UTILS_OBJ) $(ENV_OP_OBJ) $(EXEC_OBJ) -o $(NAME)
 	echo "$(GREEN)Minishell compiled successfully!$(DEF_COLOR)"
 
 clean:
@@ -88,6 +93,7 @@ clean:
 	$(RM) $(EXPAND_OBJ)
 	$(RM) $(UTILS_OBJ)
 	$(RM) $(ENV_OP_OBJ)
+	$(RM) $(EXEC_OBJ)
 
 fclean: clean
 	make fclean -C $(LIBFT)

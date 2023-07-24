@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 03:25:05 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 06:46:49 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 23:14:31 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	exit_code_expand(t_shell *shell, char *str, int *i)
+void	exit_code_expand(t_shell *shell, int *i)
 {
 	char	*var;
 
@@ -47,10 +47,10 @@ void	if_dollar_sign(t_shell *shell, char *str, int *i)
 	(*i)++;
 	if (str[*i] == '?')
 	{
-		exit_code_expand(shell, str, i);
+		exit_code_expand(shell, i);
 		return ;
 	}
-	len_variable = is_valid_syntax_var(shell, &str[*i]);
+	len_variable = is_valid_syntax_var(&str[*i]);
 	if (len_variable != 0)
 	{
 		variable_expand(shell, str, i, len_variable);
@@ -99,7 +99,7 @@ void	is_expandable(t_shell *shell)
 					non_quote_expand(shell, token->str, &i, &token->type);
 			}
 			del_one_from_garbage(&shell->garbage, token->str);
-			token->str = merge_queue(shell, token);
+			token->str = merge_queue(shell);
 		}
 		token = token->next;
 	}

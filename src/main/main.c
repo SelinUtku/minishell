@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 16:49:40 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 00:13:11 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+void	exec_choice(t_shell *shell);
 
 int	check_syntax_error(t_shell *shell)
 {
@@ -39,40 +41,6 @@ int	main(int argc, char **argv, char **env)
 	}
 	return (0);
 }
-
-void	print_token(t_token *token)
-{
-	t_token	*temp;
-
-	temp = token;
-	printf("INPUT ORDER\n");
-	while (temp)
-	{
-		printf("Token Type : %d ", temp->type);
-		printf("Token String : %s$\n", temp->str);
-		temp = temp->next;
-	}
-}
-
-void	print_order(t_queue **front)
-{
-	t_queue	*temp;
-
-	temp = *front;
-	printf("EXEC ORDER\n");
-	while (temp && temp->content)
-	{
-		printf("Token Type : %d ", ((t_token *)temp->content)->type);
-		printf("Token String : %s\n", ((t_token *)temp->content)->str);
-		// dequeue(front);
-		temp = temp->next;
-	}
-}
-void	leaks(void)
-{
-	system("leaks minishell");
-}
-
 void	init_shell_struct(t_shell *shell)
 {
 	shell->token = NULL;
@@ -86,7 +54,6 @@ int	get_input(char **env)
 {
 	t_shell	*shell;
 
-	// atexit(&leaks);
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
 		return (0);
@@ -98,61 +65,66 @@ int	get_input(char **env)
 	create_export_list(shell);
 	while (1)
 	{
-		// signals(shell);
-		// if (isatty(fileno(stdin)))
-		// 	shell->input = readline("MinisHell$ ");
-		// else
-		// {
+		init_shell_struct(shell);
+		signals(shell);
+		if (isatty(fileno(stdin)))
+			shell->input = readline("MinisHell$ ");
+		else
+		{
 			char *line;
 			line = get_next_line(fileno(stdin));
 			shell->input = ft_strtrim(line, "\n");
 			free(line);
-		// }
+		}
 		// shell->input = readline("MinisHELL$ ");
 		// ft_exit(shell);
 		if (shell->input == NULL || shell->input[0] == EOF)
 			exit(shell->status);
 		add_history(shell->input);
 		define_type(shell);
-		// print_token(shell->token);
 		exec_order(shell);
 		is_expandable(shell);
 		split_after_expand(shell);
 		delete_quotes(shell);
-		// print_order(&shell->front);
 		here_doc(shell);
+		shell->num_pipe = pipe_counter(shell);
 		if (check_syntax_error(shell) == 0)
-		{
-			shell->num_pipe = pipe_counter(shell);
-			if (shell->num_pipe == 0)
-			{
-				char **str = command_pointer(shell->token);
-				if (is_builtin(*str))
-				{
-					int fd_in = dup(STDIN_FILENO);
-					int	fd_out = dup(STDOUT_FILENO);
-					handle_redirections(shell, NULL, shell->token, 0);
-					which_builtin(shell, str);
-					input_dup2(fd_in, NULL, 0);
-					output_dup2(fd_out, NULL, 0);
-				}
-				else
-					pipex(shell, shell->my_env);
-			}
-			else
-				pipex(shell, shell->my_env);
-		}
+			exec_choice(shell);
 		unlink_heredocs(shell);
-		// print_token(shell->token);
 		free(shell->input);
 	}
+	clean_garbage(&shell->garbage);
 	return (shell->status);
 
 }
 
+void	exec_choice(t_shell *shell)
+{
+	char	**str;
 
-/*
-heredoc open degistirdim
-handle redirection input output dup2 pipex ve flag gonderdim
+	if (shell->num_pipe == 0)
+	{
+		str = command_pointer(shell->token);
+		if (str && is_builtin(*str))
+		{
+			shell->term_fd[0] = dup(STDIN_FILENO);
+			shell->term_fd[1] = dup(STDOUT_FILENO);
+			handle_redirections(shell, NULL, shell->token, 0);
+			if (is_builtin(*str) == 4)
+			{
+				close(shell->term_fd[0]);
+				close(shell->term_fd[1]);
+			}
+			which_builtin(shell, str);
+			input_dup2(shell->term_fd[0], NULL, 0);
+			output_dup2(shell->term_fd[1], NULL, 0);
+		}
+		else
+			pipex(shell);
+		free(str);
+	}
+	else
+		pipex(shell);
+}
 
-*/
+//handle_redirections should may return true or false for echo. < input echo hello (input doesnt exist);

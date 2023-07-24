@@ -11,18 +11,18 @@ void	exec_order(t_shell *shell)
 		error_printer(SYNTAX_ERR_MSG, "|", "'");
 		return ;
 	}
-	if (order_heredoc(shell, temp) == false)
+	if (order_heredoc(shell) == false)
 		return ;
 }
 
-bool	order_heredoc(t_shell *shell, t_token *token)
+bool	order_heredoc(t_shell *shell)
 {
 	t_token	*temp;
 
 	temp = shell->token;
 	while (temp)
 	{
-		if (is_syntax_error(shell, temp) == true)
+		if (is_syntax_error(temp) == true)
 			return (false);
 		if (temp->type == 0)
 		{
@@ -38,7 +38,7 @@ bool	order_heredoc(t_shell *shell, t_token *token)
 	return (true);
 }
 
-bool	is_syntax_error(t_shell *shell, t_token *token)
+bool	is_syntax_error(t_token *token)
 {
 	if (token->type == PIPE)
 	{

@@ -3,82 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 02:25:13 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 14:40:58 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 23:25:55 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	pipe_counter(t_shell *shell)
-{
-	t_token	*temp;
-	int		i;
-
-	temp = shell->token;
-	i = 0;
-	while (temp && temp->str)
-	{
-		if (temp->type == PIPE)
-			i++;
-		temp = temp->next;
-	}
-	return (i);
-}
-
-void	initialize_pipex(t_pipex *pipex)
-{
-	pipex->pid = NULL;
-	pipex->command = NULL;
-	pipex->all_paths = NULL;
-	pipex->pipeline = NULL;
-	pipex->envp = NULL;
-	pipex->cmd_path = NULL;
-	pipex->num_commands = 0;
-}
-
-void	free_pipex_all(t_pipex *pipex)
-{
-	if (pipex->cmd_path)
-	{
-		free(pipex->cmd_path);
-		pipex->cmd_path = NULL;
-	}
-	if (pipex->all_paths)
-	{
-		free_char_dubleptr(pipex->all_paths);
-		pipex->all_paths = NULL;
-	}
-	if (pipex->command)
-	{
-		free(pipex->command);
-		pipex->command = NULL;
-	}
-	if (pipex->pid)
-	{
-		free(pipex->pid);
-		pipex->pid = NULL;
-	}
-	if (pipex->pipeline)
-	{
-		free_int_dubleptr(pipex->pipeline, pipex->num_commands - 1);
-		pipex->pipeline = NULL;
-	}
-	if (pipex)
-	{
-		free(pipex);
-		pipex = NULL;
-	}
-}
-
-void	pipex(t_shell *shell, char **envp)
+void	pipex(t_shell *shell)
 {
 	t_pipex	*pipex;
 
 	pipex = (t_pipex *)malloc(sizeof(t_pipex));
-	// pipex = shell->pipex;
 	initialize_pipex(pipex);
 	pipex->num_commands = shell->num_pipe + 1;
 	pipex->envp = shell->my_env;
@@ -96,7 +34,7 @@ void	create_pipelines(t_pipex *pipex, int num)
 	pipex->pipeline = (int **)malloc(num * sizeof(int *));
 	if (pipex->pipeline == NULL)
 	{
-		//shell->status = 1;
+		// shell->status = 1;
 		return (perror("malloc"));
 	}
 	while (++i < num)
@@ -105,13 +43,13 @@ void	create_pipelines(t_pipex *pipex, int num)
 		if (pipex->pipeline[i] == NULL)
 		{
 			free_int_dubleptr(pipex->pipeline, i);
-			//shell->status = 1;
+			// shell->status = 1;
 			return (perror("malloc"));
 		}
 		if (pipe(pipex->pipeline[i]) == -1)
 		{
 			free_int_dubleptr(pipex->pipeline, num);
-			//shell->status = 1;
+			// shell->status = 1;
 			return (perror("pipe"));
 		}
 	}
@@ -125,7 +63,7 @@ void	create_child_process(t_shell *shell, t_pipex *pipex)
 	if (pipex->pid == NULL)
 	{
 		free_int_dubleptr(pipex->pipeline, pipex->num_commands - 1);
-		//shell->status = 1;
+		shell->status = 1;
 		return (perror("malloc"));
 	}
 	i = -1;
@@ -137,81 +75,21 @@ void	create_child_process(t_shell *shell, t_pipex *pipex)
 			perror("Fork");
 			free(pipex->pid);
 			free_int_dubleptr(pipex->pipeline, pipex->num_commands - 1);
-			//shell->status = 1;
+			shell->status = 1;
 			return (perror("fork"));
 		}
 		exec_child_process(shell, pipex, i);
 	}
 }
 
-t_token	*find_right_token(t_shell *shell, int num_pipe)
+void	exec_child_process(t_shell *shell, t_pipex *pipex, int i)
 {
-	t_token	*temp;
-	int		i;
-
-	temp = shell->token;
-	i = 0;
-	while (temp && i < num_pipe)
-	{
-		if (temp->type == PIPE)
-			i++;
-		temp = temp->next;
-	}
-	return (temp);
-}
-
-void	handle_redirections(t_shell *shell, t_pipex *pipex, t_token *token, int flag)
-{
-	int		fd;
-	t_token	*child;
-
-	child = token;
-	while (child && child->type != 6)
-	{
-		if (child->type == INPUT_R)
-		{
-			fd = open_file(pipex, child->next->str, INPUT_R, flag);
-			input_dup2(fd, pipex, flag);
-		}
-		else if (child->type == OUTPUT_R)
-		{
-			fd = open_file(pipex, child->next->str, OUTPUT_R, flag);
-			output_dup2(fd, pipex, flag);
-		}
-		else if (child->type == OUTPUT_R_APPEND)
-		{
-			fd = open_file(pipex, child->next->str, OUTPUT_R_APPEND, flag);
-			output_dup2(fd, pipex, flag);
-		}
-		child = child->next;
-	}
-}
-
-void	pipe_redirections(t_pipex *pipex, int i)
-{
-	if (pipex->num_commands != 1)
-	{
-		if (i == 0)
-			output_dup2(pipex->pipeline[i][1], pipex, 1);
-		else if (i == pipex->num_commands - 1)
-			input_dup2(pipex->pipeline[i - 1][0], pipex, 1);
-		else
-		{
-			input_dup2(pipex->pipeline[i - 1][0], pipex, 1);
-			output_dup2(pipex->pipeline[i][1], pipex, 1);
-		}
-	}
-}
-
-void	exec_child_process(t_shell *shell,t_pipex *pipex, int i)
-{
-	int		fd;
 	char	*cmd_path;
 	t_token	*child;
 
 	if (pipex->pid[i] == 0)
 	{
-		// signals_child(shell);
+		signals_child();
 		child = find_right_token(shell, i);
 		pipe_redirections(pipex, i);
 		handle_redirections(shell, pipex, child, 1);
@@ -259,13 +137,5 @@ char	**command_pointer(t_token *child)
 		}
 		temp = temp->next;
 	}
-	str[i] = NULL;
-	return (str);
-}
-
-void	free_pipex(t_pipex *pipex)
-{
-	free(pipex->pid);
-	free_int_dubleptr(pipex->pipeline, pipex->num_commands - 1);
-	// free_char_dubleptr(pipex->command);
+	return (str[i] = NULL, str);
 }

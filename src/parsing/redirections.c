@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 23:37:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/21 03:56:41 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 23:07:11 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ bool	is_input_redirection(t_shell *shell, int *i)
 
 bool	is_output_redirection_append(t_shell *shell, int *i)
 {
-	char	*str;
-
 	if (shell->input[(*i)] == '>' && shell->input[(*i) + 1] == '>')
 	{
 		add_token_node(shell, OUTPUT_R_APPEND, shell_strdup(shell, ">>"));

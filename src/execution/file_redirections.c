@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_redirections.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 04:10:58 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 14:54:01 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 00:09:46 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ void	input_dup2(int input, t_pipex *pipex, int flag)
 		perror("dup2");
 		close(input);
 		if (flag == 0)
-			return;
-		// free_pipex(pipex);
+			return ;
 		if (pipex != NULL)
 			free_pipex_all(pipex);
 		exit(1);
@@ -35,7 +34,7 @@ void	output_dup2(int output, t_pipex *pipex, int flag)
 		perror("dup2");
 		close(output);
 		if (flag == 0)
-			return;
+			return ;
 		if (pipex != NULL)
 			free_pipex_all(pipex);
 		exit(1);
@@ -60,15 +59,16 @@ int	open_file(t_pipex *pipex, char *filename, int rdir, int flag)
 {
 	int	fd;
 
+	fd = 0;
 	if (rdir == INPUT_R)
 	{
 		fd = open(filename, O_RDONLY);
 		if (fd < 0)
 		{
-			free_pipex_all(pipex);
 			perror("Minishell: input");
 			if (flag == 0)
-				return (1);
+				return (-1);
+			free_pipex_all(pipex);
 			exit(EXIT_FAILURE);
 		}
 		return (fd);
@@ -79,11 +79,11 @@ int	open_file(t_pipex *pipex, char *filename, int rdir, int flag)
 		fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd < 0 || (access(filename, W_OK) != 0))
 	{
-		if (pipex != NULL)
-			free_pipex_all(pipex);
 		perror("Minishell: output");
 		if (flag == 0)
 			return (1);
+		if (pipex != NULL)
+			free_pipex_all(pipex);
 		exit(EXIT_FAILURE);
 	}
 	return (fd);

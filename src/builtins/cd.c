@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 02:04:07 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 01:28:36 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 23:07:47 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	update_oldpwd(t_shell *shell, char *current_pwd)
 {
 	static int		check = 0;
-	int				i;
 
 	if (check == 0)
 	{
@@ -50,7 +49,6 @@ void	cd_to_home(t_shell *shell, char *current_pwd)
 void	ft_cd(t_shell *shell, char *path)
 {
 	char	*str;
-	int		index;
 	char	*current_pwd;
 
 	shell->status = 0;

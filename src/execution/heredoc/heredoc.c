@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 03:27:52 by sutku             #+#    #+#             */
-/*   Updated: 2023/07/24 14:43:48 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 23:12:10 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	here_doc(t_shell *shell)
 	}
 }
 
-void	heredoc_expand(t_shell *shell, char *str, t_type type)
+void	heredoc_expand(t_shell *shell, char *str)
 {
 	int	start;
 	int	i;
@@ -80,7 +80,6 @@ void	change_token_values(t_shell *shell, t_token *token, char *file)
 int	execute_heredoc(t_shell *shell, t_token *temp_token, int fd)
 {
 	char	*str;
-	int		len;
 
 	str = NULL;
 	write(0, "> ", 2);
@@ -94,9 +93,9 @@ int	execute_heredoc(t_shell *shell, t_token *temp_token, int fd)
 	}
 	else
 	{
-		heredoc_expand(shell, str, temp_token->type);
+		heredoc_expand(shell, str);
 		free(str);
-		ft_putstr_fd(merge_queue(shell, temp_token), fd);
+		ft_putstr_fd(merge_queue(shell), fd);
 	}
 	return (1);
 }

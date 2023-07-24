@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_paths.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 05:05:14 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 14:56:11 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 23:51:47 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ char	*is_exact_path(t_pipex *pipex)
 		error_cmdpath(pipex);
 	else if (ft_strchr(pipex->command[0], '/') || pipex->command[0][0] == '.')
 	{
-		if (ft_strchr(pipex->command[0], '/') == 0 && pipex->command[0][0] == '.')
+		if (ft_strchr(pipex->command[0], '/') == 0 && \
+		pipex->command[0][0] == '.')
 			error_cmdpath(pipex);
 		is_directory(pipex);
 		if (access(pipex->command[0], F_OK) == 0)
@@ -91,31 +92,4 @@ char	*is_exact_path(t_pipex *pipex)
 			error_cmdpath(pipex);
 	}
 	return (NULL);
-}
-
-void	error_cmdpath(t_pipex *pipex)
-{
-	error_printer("Minishell: ", pipex->command[0], NO_CMD);
-	free_pipex_all(pipex);
-	exit(127);
-}
-void	error_permission(t_pipex *pipex)
-{
-	error_printer("Minishell: ", pipex->command[0], NO_PERM);
-	free_pipex_all(pipex);
-	exit(126);
-}
-
-void	is_directory(t_pipex *pipex)
-{
-	DIR	*dir;
-
-	dir = opendir(pipex->command[0]);
-	if (dir)
-	{
-		closedir(dir);
-		error_printer("Minishell: ", pipex->command[0], DIR_ERR);
-		free_pipex_all(pipex);
-		exit(126);
-	}
 }

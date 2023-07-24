@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:37:42 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/23 17:33:49 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 23:10:51 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 void	ft_export(t_shell *shell, char **str)
 {
 	int		i;
-	int		j;
-	int		append;
-	char	*key;
 
 	shell->status = 0;
 	if (!str[1])
@@ -39,7 +36,7 @@ void	export_operations(t_shell *shell, char **str, int i)
 	char	*key;
 
 	append = 0;
-	j = is_valid_syntax_var(shell, str[i]);
+	j = is_valid_syntax_var(str[i]);
 	if (j && str[i][j] == '+' && str[i][j + 1] == '=')
 	{
 		append = -1;

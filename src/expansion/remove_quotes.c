@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   remove_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/27 02:41:30 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 04:36:35 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 23:12:22 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	delete_quotes(t_shell *shell)
 				non_quote_last(shell, temp_token->str, &i);
 		}
 		del_one_from_garbage(&shell->garbage, temp_token->str);
-		temp_token->str = merge_queue(shell, temp_token);
+		temp_token->str = merge_queue(shell);
 		temp_token = temp_token->next;
 	}
 }

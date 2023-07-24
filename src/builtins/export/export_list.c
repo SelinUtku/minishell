@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_list.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 08:16:34 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/23 17:33:59 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 23:11:07 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	create_export_list(t_shell *shell)
 {
 	int		i;
-	int		j;
 	char	*temp;
 
 	i = 0;

@@ -3,21 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:14:28 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 15:05:25 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 23:08:03 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	exit_no_arg(t_shell *shell)
+void	exit_no_arg(t_shell *shell, char **str)
 {
 	int	status;
 
 	// ft_putendl_fd("exit", STDERR_FILENO);
 	status = shell->status;
+	free(str);
 	free_shell(shell);
 	exit(status);
 }
@@ -50,10 +51,10 @@ void	exit_non_numeric(t_shell *shell, char **str)
 
 void	ft_exit(t_shell *shell, char **str)
 {
-	int	i;
+	int	n;
 
 	if (!str[1])
-		exit_no_arg(shell);
+		exit_no_arg(shell, str);
 	else
 	{
 		exit_non_numeric(shell, str);
@@ -66,7 +67,10 @@ void	ft_exit(t_shell *shell, char **str)
 		else
 		{
 			// ft_putendl_fd("exit", STDERR_FILENO);
-			exit(ft_atoi(str[1]) % 256);
+			n = ft_atoi(str[1]) % 256;
+			free_shell(shell);
+			free(str);
+			exit(n);
 		}
 	}
 }
@@ -74,6 +78,7 @@ void	ft_exit(t_shell *shell, char **str)
 void	free_shell(t_shell *shell)
 {
 	free(shell->input);
-	// clean_garbage(&shell->garbage);
+	clean_garbage(&shell->garbage);
+	free(shell->garbage);
 	free(shell);
 }
