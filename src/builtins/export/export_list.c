@@ -6,67 +6,11 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 08:16:34 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 22:45:38 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/23 17:33:59 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
-
-void	add_to_export(t_shell *shell, char *key, char *value)
-{
-	t_export	*new;
-	t_export	*last;
-
-	new = (t_export *)my_malloc(&shell->garbage, 1, sizeof(t_export));
-	new->key = key;
-	new->value = value;
-	new->next = NULL;
-	if (shell->export_list == NULL)
-		shell->export_list = new;
-	else
-	{
-		last = shell->export_list;
-		while (last->next != NULL)
-			last = last->next;
-		last->next = new;
-	}
-}
-
-void	del_one_from_export(t_shell *shell, char *key)
-{
-	t_export	*prev;
-	t_export	*del;
-
-	del = shell->export_list;
-	prev = NULL;
-	if (del && ft_strcmp(shell->export_list->key, key) == 0)
-	{
-		shell->export_list = shell->export_list->next;
-		del_node_from_export(shell, del);
-	}
-	else
-	{
-		while (del != NULL)
-		{
-			if (ft_strcmp(del->key, key) == 0)
-			{
-				prev->next = del->next;
-				del_node_from_export(shell, del);
-				break ;
-			}
-			prev = del;
-			del = del->next;
-		}
-	}
-}
-
-void	del_node_from_export(t_shell *shell, t_export *del)
-{
-	del_one_from_garbage(&shell->garbage, del->key);
-	if (del->value)
-		del_one_from_garbage(&shell->garbage, del->value);
-	del_one_from_garbage(&shell->garbage, del);
-}
 
 void	create_export_list(t_shell *shell)
 {
@@ -84,25 +28,6 @@ void	create_export_list(t_shell *shell)
 	}
 }
 
-void	update_export_list(t_shell *shell, char *key, char *value)
-{
-	t_export	*temp;
-
-	temp = shell->export_list;
-	while (temp && temp->key)
-	{
-		if (ft_strcmp(temp->key, key) == 0)
-		{
-			if (temp->value != NULL)
-				del_one_from_garbage(&shell->garbage, temp->value);
-			temp->value = value ;
-			del_one_from_garbage(&shell->garbage, key);
-			return ;
-		}
-		temp = temp->next;
-	}
-}
-
 t_export	*check_export_list(t_shell *shell, char *key)
 {
 	t_export	*temp;
@@ -115,4 +40,25 @@ t_export	*check_export_list(t_shell *shell, char *key)
 		temp = temp->next;
 	}
 	return (NULL);
+}
+
+void	print_export_list(t_shell *shell)
+{
+	t_export	*temp;
+
+	temp = shell->export_list;
+	while (temp)
+	{
+		ft_putstr_fd("declare - x ", 1);
+		ft_putstr_fd(temp->key, 1);
+		if (temp->value)
+		{
+			ft_putchar_fd('=', 1);
+			ft_putchar_fd('\"', 1);
+			ft_putstr_fd(temp->value, 1);
+			ft_putchar_fd('\"', 1);
+		}
+		ft_putchar_fd('\n', 1);
+		temp = temp->next;
+	}
 }

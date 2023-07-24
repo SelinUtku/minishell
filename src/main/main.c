@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 23:21:32 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 07:23:50 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ void	print_order(t_queue **front)
 	printf("EXEC ORDER\n");
 	while (temp && temp->content)
 	{
-		printf("Token Type : %d ", ((t_token *)(*front)->content)->type);
-		printf("Token String : %s\n", ((t_token *)(*front)->content)->str);
+		printf("Token Type : %d ", ((t_token *)temp->content)->type);
+		printf("Token String : %s\n", ((t_token *)temp->content)->str);
 		// dequeue(front);
 		temp = temp->next;
 	}
@@ -120,8 +120,8 @@ int	get_input(char **env)
 		is_expandable(shell);
 		split_after_expand(shell);
 		delete_quotes(shell);
-		here_doc(shell);
 		// print_order(&shell->front);
+		here_doc(shell);
 		if (check_syntax_error(shell) == 0)
 		{
 			shell->num_pipe = pipe_counter(shell);
@@ -147,7 +147,6 @@ int	get_input(char **env)
 		// print_token(shell->token);
 		free(shell->input);
 	}
-	// printf("asdfasdf%d", shell->status);
 	return (shell->status);
 
 }

@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 05:05:14 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 21:02:29 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 06:27:56 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,31 +31,42 @@ char	**get_env_path(char **envp)
 	return (ft_split(getcwd(NULL, 0), ':'));
 }
 
-char	*get_command_path(t_pipex *pipex)
+void	add_slash_to_path(t_pipex *pipex)
 {
 	int		i;
 	char	*ptr;
+
+	i = 0;
+	while (pipex->all_paths[i] != NULL)
+	{
+		ptr = pipex->all_paths[i];
+		pipex->all_paths[i] = ft_strjoin(pipex->all_paths[i], "/");
+		free(ptr);
+		i++;
+	}
+}
+
+char	*get_command_path(t_pipex *pipex)
+{
+	int		i;
 
 	if (is_exact_path(pipex) != NULL)
 		return (is_exact_path(pipex));
 	i = -1;
 	pipex->all_paths = get_env_path(pipex->envp);
+	add_slash_to_path(pipex);
 	while (pipex->all_paths[++i] != NULL)
 	{
-		ptr = pipex->all_paths[i];
-		pipex->all_paths[i] = ft_strjoin(pipex->all_paths[i], "/");
-		free(ptr);
 		pipex->cmd_path = ft_strjoin(pipex->all_paths[i], pipex->command[0]);
 		if (access(pipex->cmd_path, F_OK) == 0)
 		{
 			if (access(pipex->cmd_path, X_OK) == 0)
-				return (free_char_dubleptr(pipex->all_paths), pipex->cmd_path);
+				return (pipex->cmd_path);
 			else
-			{
-				free_char_dubleptr(pipex->all_paths);
 				error_permission(pipex);
-			}
 		}
+		free(pipex->cmd_path);
+		pipex->cmd_path = NULL;
 	}
 	return (error_cmdpath(pipex), NULL);
 }
@@ -84,15 +95,14 @@ char	*is_exact_path(t_pipex *pipex)
 
 void	error_cmdpath(t_pipex *pipex)
 {
-
 	error_printer("Minishell: ", pipex->command[0], NO_CMD);
-	// free_char_dubleptr(pipex->all_paths);
-	// free_pipex(pipex);
+	free_pipex_all(pipex);
 	exit(127);
 }
 void	error_permission(t_pipex *pipex)
 {
 	error_printer("Minishell: ", pipex->command[0], NO_PERM);
+	free_pipex_all(pipex);// path fails 47. satir hata vermeye basliyor(all path free)
 	exit(126);
 }
 
@@ -105,6 +115,7 @@ void	is_directory(t_pipex *pipex)
 	{
 		closedir(dir);
 		error_printer("Minishell: ", pipex->command[0], DIR_ERR);
+		free_pipex_all(pipex);
 		exit(126);
 	}
 }

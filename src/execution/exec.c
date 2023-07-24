@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 02:25:13 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 17:44:49 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 07:27:47 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,57 @@ int	pipe_counter(t_shell *shell)
 	return (i);
 }
 
+void	initialize_pipex(t_pipex *pipex)
+{
+	pipex->pid = NULL;
+	pipex->command = NULL;
+	pipex->all_paths = NULL;
+	pipex->pipeline = NULL;
+	pipex->envp = NULL;
+	pipex->cmd_path = NULL;
+	pipex->num_commands = 0;
+}
+
+void	free_pipex_all(t_pipex *pipex)
+{
+	if (pipex->cmd_path)
+	{
+		free(pipex->cmd_path);
+		pipex->cmd_path = NULL;
+	}
+	if (pipex->all_paths)
+	{
+		free_char_dubleptr(pipex->all_paths);
+		pipex->all_paths = NULL;
+	}
+	if (pipex->command)
+	{
+		free(pipex->command);
+		pipex->command = NULL;
+	}
+	if (pipex->pid)
+	{
+		free(pipex->pid);
+		pipex->pid = NULL;
+	}
+	if (pipex->pipeline)
+	{
+		free_int_dubleptr(pipex->pipeline, pipex->num_commands - 1);
+		pipex->pipeline = NULL;
+	}
+	if (pipex)
+	{
+		free(pipex);
+		pipex = NULL;
+	}
+}
+
 void	pipex(t_shell *shell, char **envp)
 {
 	t_pipex	*pipex;
-	int		number_of_pipes;
 
-	number_of_pipes = pipe_counter(shell);
 	pipex = (t_pipex *)malloc(sizeof(t_pipex));
+	initialize_pipex(pipex);
 	pipex->num_commands = shell->num_pipe + 1;
 	pipex->envp = shell->my_env;
 	create_pipelines(pipex, pipex->num_commands - 1);
@@ -51,8 +95,8 @@ void	create_pipelines(t_pipex *pipex, int num)
 	pipex->pipeline = (int **)malloc(num * sizeof(int *));
 	if (pipex->pipeline == NULL)
 	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
+		//shell->status = 1;
+		return (perror("malloc"));
 	}
 	while (++i < num)
 	{
@@ -60,14 +104,14 @@ void	create_pipelines(t_pipex *pipex, int num)
 		if (pipex->pipeline[i] == NULL)
 		{
 			free_int_dubleptr(pipex->pipeline, i);
-			perror("malloc");
-			exit(EXIT_FAILURE);
+			//shell->status = 1;
+			return (perror("malloc"));
 		}
 		if (pipe(pipex->pipeline[i]) == -1)
 		{
 			free_int_dubleptr(pipex->pipeline, num);
-			perror("pipe");
-			exit(EXIT_FAILURE);
+			//shell->status = 1;
+			return (perror("pipe"));
 		}
 	}
 }
@@ -80,7 +124,8 @@ void	create_child_process(t_shell *shell, t_pipex *pipex)
 	if (pipex->pid == NULL)
 	{
 		free_int_dubleptr(pipex->pipeline, pipex->num_commands - 1);
-		exit(EXIT_FAILURE);
+		//shell->status = 1;
+		return (perror("malloc"));
 	}
 	i = -1;
 	while (++i < pipex->num_commands)
@@ -91,7 +136,8 @@ void	create_child_process(t_shell *shell, t_pipex *pipex)
 			perror("Fork");
 			free(pipex->pid);
 			free_int_dubleptr(pipex->pipeline, pipex->num_commands - 1);
-			exit(EXIT_FAILURE);
+			//shell->status = 1;
+			return (perror("fork"));
 		}
 		exec_child_process(shell, pipex, i);
 	}
@@ -113,51 +159,47 @@ t_token	*find_right_token(t_shell *shell, int num_pipe)
 	return (temp);
 }
 
-void	output_dup3(int output)
-{
-	if (dup2(output, STDOUT_FILENO) == -1)
-	{
-		perror("dup2");
-		// free_pipex(pipex);
-		exit(1);
-	}
-	if (dup2(output, STDERR_FILENO) == -1)
-	{
-		perror("dup2");
-		// free_pipex(pipex);
-		exit(1);
-	}
-	if (output != 1)
-		close(output);
-}
-
-void	handle_redirections(t_shell *shell, t_token *blaa)
+void	handle_redirections(t_shell *shell, t_token *token)
 {
 	int		fd;
 	t_token	*child;
 
-	child = blaa;
+	child = token;
 	while (child && child->type != 6)
 	{
 		if (child->type == INPUT_R)
 		{
 			fd = open_file(child->next->str, INPUT_R);
 			input_dup2(fd);
-			close(fd);
 		}
 		else if (child->type == OUTPUT_R)
 		{
 			fd = open_file(child->next->str, OUTPUT_R);
 			output_dup2(fd);
-			close(fd);
 		}
 		else if (child->type == OUTPUT_R_APPEND)
 		{
 			fd = open_file(child->next->str, OUTPUT_R_APPEND);
 			output_dup2(fd);
-			close(fd);
 		}
+		// close(fd);
 		child = child->next;
+	}
+}
+
+void	pipe_redirections(t_pipex *pipex, int i)
+{
+	if (pipex->num_commands != 1)
+	{
+		if (i == 0)
+			output_dup2(pipex->pipeline[i][1]);
+		else if (i == pipex->num_commands - 1)
+			input_dup2(pipex->pipeline[i - 1][0]);
+		else
+		{
+			input_dup2(pipex->pipeline[i - 1][0]);
+			output_dup2(pipex->pipeline[i][1]);
+		}
 	}
 }
 
@@ -170,26 +212,20 @@ void	exec_child_process(t_shell *shell,t_pipex *pipex, int i)
 	{
 		// signals_child(shell);
 		child = find_right_token(shell, i);
-		if (pipex->num_commands != 1)
-		{
-			if (i == 0)
-				output_dup2(pipex->pipeline[i][1]);
-			else if (i == pipex->num_commands - 1)
-				input_dup2(pipex->pipeline[i - 1][0]);
-			else
-			{
-				input_dup2(pipex->pipeline[i - 1][0]);
-				output_dup2(pipex->pipeline[i][1]);
-			}
-		}
+		pipe_redirections(pipex, i);
 		handle_redirections(shell, child);
 		pipex->command = command_pointer(child);
+		if (!pipex->command || !pipex->command[0])
+		{
+			free_pipex_all(pipex);
+			exit(0);
+		}
 		if (is_builtin(pipex->command[0]))
 			exec_builtin(shell, pipex->command, pipex);
 		close_pipes(pipex);
+		// clean_garbage(&shell->garbage);
 		execve(get_command_path(pipex), pipex->command, pipex->envp);
-		clean_garbage(&shell->garbage);
-		// free(pipex->cmd_path);
+		free_pipex_all(pipex);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -211,7 +247,7 @@ char	**command_pointer(t_token *child)
 	temp = child;
 	str = malloc((i + 1) * sizeof(char *));
 	i = 0;
-	while (temp && temp->type != 6)
+	while (temp && temp->type != PIPE)
 	{
 		if (temp->type == WORD)
 		{

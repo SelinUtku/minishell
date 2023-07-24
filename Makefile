@@ -16,8 +16,8 @@ WHITE = \033[0;97m
 MAIN_SRC	=	src/main/main.c  src/execution/priority.c \
 			src/execution/clean_up.c src/execution/exec.c \
 			src/execution/file_redirections.c src/execution/get_paths.c \
-			src/execution/exec_builtin.c heredoc.c \
-			src/signals/signal.c
+			src/execution/exec_builtin.c src/execution/heredoc/heredoc.c \
+			src/signals/signal.c src/execution/heredoc/heredoc_utils.c
 MAIN_OBJ	=	$(MAIN_SRC:.c=.o)
 
 GARBAGE_SRC	=	src/garbage_collector/add_to_garbage.c \
@@ -36,8 +36,10 @@ EXPAND_SRC	=	src/expansion/expand.c \
 				src/expansion/split_after_expand.c
 EXPAND_OBJ	=	$(EXPAND_SRC:.c=.o)
 
-BUILTIN_SRC	=	src/builtins/cd.c src/builtins/env.c src/builtins/exit.c src/builtins/export/export.c src/builtins/unset.c \
-				src/builtins/echo.c src/builtins/pwd.c src/builtins/export/export_list.c
+BUILTIN_SRC	=	src/builtins/cd.c src/builtins/env.c src/builtins/exit.c \
+				src/builtins/export/export.c src/builtins/unset.c \
+				src/builtins/echo.c src/builtins/pwd.c src/builtins/export/export_list.c \
+				src/builtins/export/export_operations.c
 BUILTIN_OBJ	=	$(BUILTIN_SRC:.c=.o)
 
 DATA_ST_SRC =	src/data_structures/linked_list.c \
@@ -46,7 +48,8 @@ DATA_ST_SRC =	src/data_structures/linked_list.c \
 DATA_ST_OBJ	=	$(DATA_ST_SRC:.c=.o)
 
 UTILS_SRC	=	src/utils/error_messages.c \
-				src/utils/help_function.c
+				src/utils/help_functions.c \
+				src/utils/help_functions2.c
 UTILS_OBJ	=	$(UTILS_SRC:.c=.o)
 
 ENV_OP_SRC	=	src/environment_operations/environment_operations.c

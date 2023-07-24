@@ -19,7 +19,7 @@ bool	order_heredoc(t_shell *shell, t_token *token)
 {
 	t_token	*temp;
 
-	temp = token;
+	temp = shell->token;
 	while (temp)
 	{
 		if (is_syntax_error(shell, temp) == true)

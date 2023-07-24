@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/23 17:36:29 by Cutku             #+#    #+#             */
+/*   Updated: 2023/07/24 07:22:49 by Cutku            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -40,9 +50,6 @@ bool	is_input_redirection(t_shell *shell, int *i);
 bool	is_output_redirection_append(t_shell *shell, int *i);
 bool	is_heredoc(t_shell *shell, int *i);
 
-
-
-
 //data_structures
 void	add_token_node(t_shell *shell, t_type type, char *str);
 void	add_token_next(t_shell *shell, t_token *token, t_type type, char *str);
@@ -72,16 +79,20 @@ t_token	*process_token(t_shell *shell, t_token *token, char *str, bool first);
 /*********BUILTINS*********/
 //export.c
 void		ft_export(t_shell *shell, char **str);
+void		export_operations(t_shell *shell, char **str, int i);
+void		export_to_env(t_shell *shell, char *str, int append, char *key);
+void		export_to_exp_list(t_shell *shell, char *str, int append, char *key);
+void		add_to_export(t_shell *shell, char *key, char *value);
+void		append_to_export(t_shell *shell, char *key, char *value);
+void		update_export_list(t_shell *shell, char *key, char *value);
 void		del_node_from_export(t_shell *shell, t_export *del);
 void		del_one_from_export(t_shell *shell, char *key);
-void		print_export_list(t_shell *shell);
 void		create_export_list(t_shell *shell);
-void		update_export_list(t_shell *shell, char *key, char *value);
 t_export	*check_export_list(t_shell *shell, char *str);
-void		add_to_export(t_shell *shell, char *key, char *value);
+void		print_export_list(t_shell *shell);
 //cd.c
 void	ft_cd(t_shell *shell, char *path);
-void	update_oldpwd(t_shell *shell);
+void	update_oldpwd(t_shell *shell, char *current_pwd);
 //echo.c
 void	ft_echo(t_shell *shell, char **str);
 int		check_echo_flag(char *str);
@@ -99,12 +110,21 @@ void	ft_pwd(t_shell *shell, char **str);
 //unset.c
 void	ft_unset(t_shell *shell, char **str);
 int		is_valid_syntax_var(t_shell *shell, char *str);
-
+// env.c
 void	update_env_var(t_shell *shell, char *var, char *value);
 void	add_env_var(t_shell *shell, char *var, char *value);
 void	append_env_var(t_shell *shell, char *var, char *value);
 void	delete_env_var(t_shell *shell, char *var);
 
+//heredoc.c
+void	here_doc(t_shell *shell);
+int		heredoc_strlen(char *str);
+int		delimiter_str_cmp(char *del, char *str);
+char	*heredoc_file_name(t_shell *shell, int counter);
+void	unlink_heredocs(t_shell *shell);
+void	heredoc_expand(t_shell *shell, char *str, t_type type);
+void	change_token_values(t_shell *shell, t_token *token, char *file);
+int		execute_heredoc(t_shell *shell, t_token *temp_token, int fd);
 
 //helping functions
 int		ft_double_strlen(char **str);
@@ -144,11 +164,9 @@ void	close_pipes(t_pipex *pipex);
 void	free_pipex(t_pipex *pipex);
 void	input_dup2(int input);
 void	output_dup2(int output);
-int		which_builtin(t_shell *shell, char **str);
+void	which_builtin(t_shell *shell, char **str);
 void	exec_builtin(t_shell *shell, char **str, t_pipex *pipex);
 int		is_builtin(char *str);
-void	here_doc(t_shell *shell);
-void	unlink_heredocs(t_shell *shell);
 int		ft_strcmp(char *str1, char *str2);
 void	error_not_valid_identifier(t_shell *shell, char *str1, char *str2);
 void	error_invalid_option(t_shell *shell, char **str);
@@ -162,4 +180,5 @@ void	signals_child(t_shell *shell);
 void	setup_termios(t_shell *shell);
 void	is_directory(t_pipex *pipex);
 void	error_permission(t_pipex *pipex);
+void	free_pipex_all(t_pipex *pipex);
 #endif

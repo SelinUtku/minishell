@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/24 04:41:12 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 05:08:51 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/23 17:57:18 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*shell_substr(t_shell *shell, char const *s, int start, int len)
 	return (ptr);
 }
 
-int	ft_isspace(char	a)
+int	ft_isspace(char a)
 {
 	if (a == 32 || a == 9 || a == 10)
 		return (1);

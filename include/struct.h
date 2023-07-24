@@ -6,17 +6,14 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/22 21:38:50 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 07:26:40 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #ifndef STRUCT_H
 # define STRUCT_H
 # define SYMBOLS "<>|"
 # define WORD_DELIMITERS "<>| \0"
-
 
 # define SYNTAX_ERR_MSG	"Minishell: syntax error near unexpected token `"
 # define NO_FILE		": No such file or directory"
@@ -25,7 +22,6 @@
 # define NO_CMD			": command not found"
 # define EXIT_NON_NUM	": numeric argument required"
 # define TOO_MNY_ARG	"too many arguments"
-
 
 typedef struct s_garbage
 {
@@ -77,8 +73,6 @@ typedef struct s_pipex
 	int		**pipeline;
 	char	**envp;
 	char	*cmd_path;
-	char	*infile;
-	int		heredoc;
 	int		num_commands;
 }	t_pipex;
 
@@ -90,7 +84,6 @@ typedef struct s_shell
 	char		*input;
 	char		**my_env;
 	struct termios termios;
-	struct termios	saved_termios;
 	t_garbage	*garbage;
 	t_token		*token;
 	t_queue		*front;
@@ -109,3 +102,4 @@ void	order_redirections(t_shell *shell, t_token *token);
 bool	is_syntax_error(t_shell *shell, t_token *token);
 
 #endif
+//num_pipe = 0 ve is bultin ise

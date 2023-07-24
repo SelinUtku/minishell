@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 04:10:58 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/21 23:26:55 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 07:21:15 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ void	input_dup2(int input)
 		// free_pipex(pipex);
 		exit(1);
 	}
-	if (input)
-		close(input);
+	close(input);
 }
 
 void	output_dup2(int output)
@@ -32,8 +31,7 @@ void	output_dup2(int output)
 		// free_pipex(pipex);
 		exit(1);
 	}
-	if (output != 1)
-		close(output);
+	close(output);
 }
 
 void	my_waitpid(t_shell *shell, t_pipex *pipex)
@@ -44,8 +42,7 @@ void	my_waitpid(t_shell *shell, t_pipex *pipex)
 	i = -1;
 	while (++i < pipex->num_commands)
 		waitpid(pipex->pid[i], &status, 0);
-	free(pipex->pid);
-	free_int_dubleptr(pipex->pipeline, pipex->num_commands - 1);
+	free_pipex_all(pipex);
 	if (WIFEXITED(status))
 		shell->status = WEXITSTATUS(status);
 }
@@ -72,7 +69,7 @@ int	open_file(char *filename, int flag)
 	if (fd < 0 || (access(filename, W_OK) != 0))
 	{
 		// free_pipex(pipex);
-		perror("pipex: output");
+		perror("Minishell: output");
 		// exit(EXIT_FAILURE);
 	}
 	return (fd);
