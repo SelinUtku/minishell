@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 03:27:52 by sutku             #+#    #+#             */
-/*   Updated: 2023/07/24 03:24:03 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 14:43:48 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	here_doc(t_shell *shell)
 		if (token->type == HEREDOC)
 		{
 			file_name = heredoc_file_name(shell, shell->num_heredoc);
-			fd = open_file(file_name, OUTPUT_R);
+			fd = open_file(NULL, file_name, OUTPUT_R, 0);
 			shell->num_heredoc++;
 			while (1)
 				if (execute_heredoc(shell, token->next, fd) == 0)

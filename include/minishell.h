@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 17:36:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 07:22:49 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 07:49:30 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,6 @@ char	*shell_substr(t_shell *shell, char const *s, int start, int len);
 void	pipex(t_shell *shell, char **envp);
 int		pipe_counter(t_shell *shell);
 t_token	*find_right_token(t_shell *shell, int num_pipe);
-void	handle_redirections(t_shell *shell, t_token *child);
 void	exec_child_process(t_shell *shell,t_pipex *pipex, int i);
 char	**command_pointer(t_token *child);
 void	create_child_process(t_shell *shell, t_pipex *pipex);
@@ -151,8 +150,8 @@ void	error_cmdpath(t_pipex *pipex);
 void	exec_here_doc(t_pipex *pipex, char **argv, int argc);
 //Some usefull functions. File > pipex_utils.c
 void	my_dup2(int input, int output, t_pipex *pipex);
-void	my_waitpid(t_shell *shell,t_pipex *pipex);
-int		open_file(char *filename, int flag);
+void	my_waitpid(t_shell *shell, t_pipex *pipex);
+int		open_file(t_pipex *pipex, char *filename, int rdir, int flag);
 //Parsing. File > parsing.c 
 char	**ft_parser(char *string);
 char	**word_lenght(char *string, int size);
@@ -162,8 +161,11 @@ void	free_char_dubleptr(char **ptr);
 void	free_int_dubleptr(int **ptr, int size);
 void	close_pipes(t_pipex *pipex);
 void	free_pipex(t_pipex *pipex);
-void	input_dup2(int input);
-void	output_dup2(int output);
+
+void	input_dup2(int input, t_pipex *pipex, int flag);
+void	output_dup2(int output, t_pipex *pipex, int flag);
+void	handle_redirections(t_shell *shell, t_pipex *pipex, t_token *child, int flag);
+
 void	which_builtin(t_shell *shell, char **str);
 void	exec_builtin(t_shell *shell, char **str, t_pipex *pipex);
 int		is_builtin(char *str);

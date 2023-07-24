@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 07:23:50 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 16:49:40 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,17 +98,16 @@ int	get_input(char **env)
 	create_export_list(shell);
 	while (1)
 	{
-		init_shell_struct(shell);
 		// signals(shell);
-		if (isatty(fileno(stdin)))
-			shell->input = readline("MinisHell$ ");
-		else
-		{
+		// if (isatty(fileno(stdin)))
+		// 	shell->input = readline("MinisHell$ ");
+		// else
+		// {
 			char *line;
 			line = get_next_line(fileno(stdin));
 			shell->input = ft_strtrim(line, "\n");
 			free(line);
-		}
+		// }
 		// shell->input = readline("MinisHELL$ ");
 		// ft_exit(shell);
 		if (shell->input == NULL || shell->input[0] == EOF)
@@ -132,10 +131,10 @@ int	get_input(char **env)
 				{
 					int fd_in = dup(STDIN_FILENO);
 					int	fd_out = dup(STDOUT_FILENO);
-					handle_redirections(shell, shell->token);
+					handle_redirections(shell, NULL, shell->token, 0);
 					which_builtin(shell, str);
-					input_dup2(fd_in);
-					output_dup2(fd_out);
+					input_dup2(fd_in, NULL, 0);
+					output_dup2(fd_out, NULL, 0);
 				}
 				else
 					pipex(shell, shell->my_env);
@@ -150,3 +149,10 @@ int	get_input(char **env)
 	return (shell->status);
 
 }
+
+
+/*
+heredoc open degistirdim
+handle redirection input output dup2 pipex ve flag gonderdim
+
+*/

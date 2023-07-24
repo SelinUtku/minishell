@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 07:26:40 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 07:32:26 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_shell
 	char		*input;
 	char		**my_env;
 	struct termios termios;
+	t_pipex		*pipex;
 	t_garbage	*garbage;
 	t_token		*token;
 	t_queue		*front;

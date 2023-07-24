@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:14:28 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/23 17:41:45 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 15:05:25 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,6 @@ void	ft_exit(t_shell *shell, char **str)
 void	free_shell(t_shell *shell)
 {
 	free(shell->input);
-	clean_garbage(&shell->garbage);
+	// clean_garbage(&shell->garbage);
 	free(shell);
 }

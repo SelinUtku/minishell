@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 02:25:13 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 07:27:47 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 14:40:58 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	pipex(t_shell *shell, char **envp)
 	t_pipex	*pipex;
 
 	pipex = (t_pipex *)malloc(sizeof(t_pipex));
+	// pipex = shell->pipex;
 	initialize_pipex(pipex);
 	pipex->num_commands = shell->num_pipe + 1;
 	pipex->envp = shell->my_env;
@@ -159,7 +160,7 @@ t_token	*find_right_token(t_shell *shell, int num_pipe)
 	return (temp);
 }
 
-void	handle_redirections(t_shell *shell, t_token *token)
+void	handle_redirections(t_shell *shell, t_pipex *pipex, t_token *token, int flag)
 {
 	int		fd;
 	t_token	*child;
@@ -169,20 +170,19 @@ void	handle_redirections(t_shell *shell, t_token *token)
 	{
 		if (child->type == INPUT_R)
 		{
-			fd = open_file(child->next->str, INPUT_R);
-			input_dup2(fd);
+			fd = open_file(pipex, child->next->str, INPUT_R, flag);
+			input_dup2(fd, pipex, flag);
 		}
 		else if (child->type == OUTPUT_R)
 		{
-			fd = open_file(child->next->str, OUTPUT_R);
-			output_dup2(fd);
+			fd = open_file(pipex, child->next->str, OUTPUT_R, flag);
+			output_dup2(fd, pipex, flag);
 		}
 		else if (child->type == OUTPUT_R_APPEND)
 		{
-			fd = open_file(child->next->str, OUTPUT_R_APPEND);
-			output_dup2(fd);
+			fd = open_file(pipex, child->next->str, OUTPUT_R_APPEND, flag);
+			output_dup2(fd, pipex, flag);
 		}
-		// close(fd);
 		child = child->next;
 	}
 }
@@ -192,13 +192,13 @@ void	pipe_redirections(t_pipex *pipex, int i)
 	if (pipex->num_commands != 1)
 	{
 		if (i == 0)
-			output_dup2(pipex->pipeline[i][1]);
+			output_dup2(pipex->pipeline[i][1], pipex, 1);
 		else if (i == pipex->num_commands - 1)
-			input_dup2(pipex->pipeline[i - 1][0]);
+			input_dup2(pipex->pipeline[i - 1][0], pipex, 1);
 		else
 		{
-			input_dup2(pipex->pipeline[i - 1][0]);
-			output_dup2(pipex->pipeline[i][1]);
+			input_dup2(pipex->pipeline[i - 1][0], pipex, 1);
+			output_dup2(pipex->pipeline[i][1], pipex, 1);
 		}
 	}
 }
@@ -206,6 +206,7 @@ void	pipe_redirections(t_pipex *pipex, int i)
 void	exec_child_process(t_shell *shell,t_pipex *pipex, int i)
 {
 	int		fd;
+	char	*cmd_path;
 	t_token	*child;
 
 	if (pipex->pid[i] == 0)
@@ -213,7 +214,7 @@ void	exec_child_process(t_shell *shell,t_pipex *pipex, int i)
 		// signals_child(shell);
 		child = find_right_token(shell, i);
 		pipe_redirections(pipex, i);
-		handle_redirections(shell, child);
+		handle_redirections(shell, pipex, child, 1);
 		pipex->command = command_pointer(child);
 		if (!pipex->command || !pipex->command[0])
 		{
@@ -223,8 +224,10 @@ void	exec_child_process(t_shell *shell,t_pipex *pipex, int i)
 		if (is_builtin(pipex->command[0]))
 			exec_builtin(shell, pipex->command, pipex);
 		close_pipes(pipex);
-		// clean_garbage(&shell->garbage);
-		execve(get_command_path(pipex), pipex->command, pipex->envp);
+		cmd_path = get_command_path(pipex);
+		execve(cmd_path, pipex->command, pipex->envp);
+		clean_garbage(&shell->garbage);
+		free(cmd_path);
 		free_pipex_all(pipex);
 		exit(EXIT_FAILURE);
 	}

@@ -62,9 +62,9 @@ READLINE_LIB	=	-lreadline
 LIBFT		= ./libft
 LIBFT_LIB	= ./libft/libft.a
 
-CC			= cc
+CC			= gcc -fsanitize=address -g
 RM			= rm -f
-CFLAGS		= $(INCL_RDL_HEADER) -g #-Wall -Werror -Wextra
+CFLAGS		= $(INCL_RDL_HEADER) #-Wall -Werror -Wextra
 
 NAME		= minishell
 

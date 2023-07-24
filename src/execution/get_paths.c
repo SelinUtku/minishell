@@ -6,7 +6,7 @@
 /*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/16 05:05:14 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 06:27:56 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/24 14:56:11 by Cutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	error_cmdpath(t_pipex *pipex)
 void	error_permission(t_pipex *pipex)
 {
 	error_printer("Minishell: ", pipex->command[0], NO_PERM);
-	free_pipex_all(pipex);// path fails 47. satir hata vermeye basliyor(all path free)
+	free_pipex_all(pipex);
 	exit(126);
 }
 
