@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:37:42 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 23:10:51 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 20:59:18 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ void	ft_export(t_shell *shell, char **str)
 {
 	int		i;
 
-	shell->status = 0;
+	g_exit_status = 0;
 	if (!str[1])
 		return (print_export_list(shell));
 	if (str[1][0] == '-' && str[1][1])
-		return (error_invalid_option(shell, str));
+		return (error_invalid_option(str));
 	i = 1;
 	while (str[i])
 	{
@@ -55,7 +55,7 @@ void	export_operations(t_shell *shell, char **str, int i)
 			add_to_export(shell, shell_substr(shell, str[i], 0, j), NULL);
 	}
 	else
-		error_not_valid_identifier(shell, str[0], str[i]);
+		error_not_valid_identifier(str[0], str[i]);
 }
 
 void	export_to_exp_list(t_shell *shell, char *str, int append, char *key)

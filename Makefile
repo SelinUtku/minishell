@@ -13,7 +13,7 @@ WHITE = \033[0;97m
 
 # USER		= $(shell whoami)
 
-MAIN_SRC	=	src/main/main.c 
+MAIN_SRC	=	src/main/main.c src/main/main_utils.c
 MAIN_OBJ	=	$(MAIN_SRC:.c=.o)
 
 EXEC_SRC	=	src/execution/priority.c \
@@ -80,8 +80,8 @@ $(LIBFT_LIB):
 	echo "$(GREEN)Libft compiled successfully!$(DEF_COLOR)"
 
 $(NAME): $(LIBFT_LIB) $(MAIN_OBJ) $(PARSE_OBJ) $(BUILTIN_OBJ) $(DATA_ST_OBJ) $(GARBAGE_OBJ) $(EXPAND_OBJ) $(UTILS_OBJ) $(ENV_OP_OBJ) $(EXEC_OBJ)
-	$(CC) $(CFLAGS) $(PARSE_OBJ) $(BUILTIN_OBJ) $(DATA_ST_OBJ) $(GARBAGE_OBJ) $(MAIN_OBJ) $(LIBFT_LIB) \
-	$(INCL_RDL_LIB) $(READLINE_LIB) $(EXPAND_OBJ) $(UTILS_OBJ) $(ENV_OP_OBJ) $(EXEC_OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(PARSE_OBJ) $(BUILTIN_OBJ) $(DATA_ST_OBJ) $(GARBAGE_OBJ) $(MAIN_OBJ) \
+	$(INCL_RDL_LIB) $(READLINE_LIB) $(EXPAND_OBJ) $(UTILS_OBJ) $(ENV_OP_OBJ) $(EXEC_OBJ) $(LIBFT_LIB) -o $(NAME)
 	echo "$(GREEN)Minishell compiled successfully!$(DEF_COLOR)"
 
 clean:

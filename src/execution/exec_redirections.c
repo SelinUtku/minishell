@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 23:20:02 by sutku             #+#    #+#             */
-/*   Updated: 2023/07/25 18:57:54 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 21:02:36 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,14 @@ bool	do_redirections(t_pipex *pipex, t_token *child, int flag)
 	return (true);
 }
 
-bool	handle_redirections(t_shell *shell, t_pipex *pipex, \
-t_token *token, int flag)
+bool	handle_redirections(t_pipex *pipex, t_token *token, int flag)
 {
 	t_token	*child;
 
 	child = token;
 	while (child && child->type != 6)
 	{
-		if (check_ambiguous_redirect(shell, pipex, child, flag) == true)
+		if (check_ambiguous_redirect(pipex, child, flag) == true)
 			return (false);
 		if (do_redirections(pipex, child, flag) == false)
 			return (false);
@@ -73,8 +72,7 @@ void	pipe_redirections(t_pipex *pipex, int i)
 	}
 }
 
-bool	check_ambiguous_redirect(t_shell *shell, t_pipex *pipex, \
-t_token *child, int flag)
+bool	check_ambiguous_redirect(t_pipex *pipex, t_token *child, int flag)
 {
 	if (child->type <= 3 && child->type >= 0 && child->next->next \
 	&& child->next->next->type == FILENAME)
@@ -82,7 +80,7 @@ t_token *child, int flag)
 		error_printer("Minishell:", " ", "ambiguous redirect");
 		if (flag == 0)
 		{
-			shell->status = 1;
+			g_exit_status = 1;
 			return (true);
 		}
 		if (pipex != NULL)

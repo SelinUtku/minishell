@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:08:05 by sutku             #+#    #+#             */
-/*   Updated: 2023/07/24 23:06:08 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 20:27:58 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,11 @@ void	handle_signal_int(int signum)
 	}
 }
 
-
 void	signals_child(void)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 }
-
 
 void	signals(t_shell *shell)
 {

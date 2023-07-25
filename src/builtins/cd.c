@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 02:04:07 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 23:07:47 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 20:46:12 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,16 @@ void	cd_to_home(t_shell *shell, char *current_pwd)
 	index = ft_getenv(shell->my_env, "HOME");
 	if (index == -1)
 	{
-		shell->status = 1;
+		g_exit_status = 1;
 		error_printer("Minishell: ", "cd: ", "HOME not set");
 		return ;
 	}
 	str = value_of_expandable(shell, "HOME");
 	if (chdir(str) == -1)
-		return (shell->status = 1, perror("cd:"));
+		return (g_exit_status = 1, perror("cd:"));
 	update_env_var(shell, shell_strdup(shell, "PWD="), str);
 	update_oldpwd(shell, current_pwd);
-	shell->status = 0;
+	g_exit_status = 0;
 }
 
 void	ft_cd(t_shell *shell, char *path)
@@ -51,7 +51,7 @@ void	ft_cd(t_shell *shell, char *path)
 	char	*str;
 	char	*current_pwd;
 
-	shell->status = 0;
+	g_exit_status = 0;
 	current_pwd = getcwd(NULL, 0);
 	if (!path)
 		cd_to_home(shell, current_pwd);
@@ -62,7 +62,7 @@ void	ft_cd(t_shell *shell, char *path)
 		if (chdir(path) == -1)
 		{
 			error_printer("Minishell: cd: ", path, NO_FILE);
-			shell->status = 1;
+			g_exit_status = 1;
 			return (free(current_pwd));
 		}
 		str = getcwd(NULL, 0);

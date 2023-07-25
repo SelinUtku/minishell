@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 03:14:28 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 23:08:03 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 20:46:14 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	exit_no_arg(t_shell *shell, char **str)
 	int	status;
 
 	// ft_putendl_fd("exit", STDERR_FILENO);
-	status = shell->status;
+	status = g_exit_status;
 	free(str);
 	free_shell(shell);
 	exit(status);
@@ -62,7 +62,7 @@ void	ft_exit(t_shell *shell, char **str)
 		{
 			// ft_putendl_fd("exit", STDERR_FILENO);
 			error_printer("Minishell: ", "exit: ", TOO_MNY_ARG);
-			shell->status = 1;
+			g_exit_status = 1;
 		}
 		else
 		{

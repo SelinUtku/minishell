@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: Cutku <cutku@student.42heilbronn.de>       +#+  +:+       +#+        */
+/*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/05 23:23:52 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/21 09:37:12 by Cutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 21:09:59 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,19 @@ void	define_type(t_shell *shell)
 	while (shell->input[i] != '\0')
 	{
 		if (is_input_redirection(shell, &i))
-			;
+			skip_spaces(shell->input, &i);
 		else if (is_output_redirection(shell, &i))
-			;
+			skip_spaces(shell->input, &i);
 		else if (is_heredoc(shell, &i))
-			;
+			skip_spaces(shell->input, &i);
 		else if (is_output_redirection_append(shell, &i))
-			;
+			skip_spaces(shell->input, &i);
 		else if (is_pipe(shell, &i))
-			;
+			skip_spaces(shell->input, &i);
 		else if (is_word(shell, &i))
-			;
-		skip_spaces(shell->input, &i);
+			skip_spaces(shell->input, &i);
+		else
+			skip_spaces(shell->input, &i);
 	}
 }
 

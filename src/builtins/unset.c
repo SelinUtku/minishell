@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 03:55:30 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 23:10:04 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 20:59:12 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void	ft_unset(t_shell *shell, char **str)
 {
 	int	i;
 
-	shell->status = 0;
+	g_exit_status = 0;
 	if (str[1] && str[1][0] == '-' && str[1][1])
 	{
-		error_invalid_option(shell, str);
+		error_invalid_option(str);
 		return ;
 	}
 	i = 1;
@@ -29,7 +29,7 @@ void	ft_unset(t_shell *shell, char **str)
 		&& ft_strlen(str[i]) != 0)
 			delete_env_var(shell, str[i]);
 		else
-			error_not_valid_identifier(shell, str[0], str[i]);
+			error_not_valid_identifier(str[0], str[i]);
 		i++;
 	}
 }

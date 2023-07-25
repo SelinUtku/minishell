@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 02:29:53 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/25 00:04:46 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 21:00:50 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	which_builtin(t_shell *shell, char **str)
 	if (str)
 	{
 		if (!ft_strcmp(*str, "echo"))
-			ft_echo(shell, str);
+			ft_echo(str);
 		else if (!ft_strcmp(*str, "export"))
 			ft_export(shell, str);
 		else if (!ft_strcmp(*str, "unset"))
@@ -52,7 +52,7 @@ void	which_builtin(t_shell *shell, char **str)
 		else if (!ft_strcmp(*str, "env"))
 			ft_env(shell, str);
 		else if (!ft_strcmp(*str, "pwd"))
-			ft_pwd(shell, str);
+			ft_pwd(str);
 	}
 }
 

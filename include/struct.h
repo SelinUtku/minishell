@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/25 19:07:35 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 20:48:30 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@
 # define NO_CMD			": command not found"
 # define EXIT_NON_NUM	": numeric argument required"
 # define TOO_MNY_ARG	"too many arguments"
-
-int	e_status;
 
 typedef struct s_garbage
 {
@@ -80,29 +78,20 @@ typedef struct s_pipex
 
 typedef struct s_shell
 {
-	int			status;
-	int			num_pipe;
-	int			term_fd[2];
-	int			num_heredoc;
-	char		*input;
-	char		**my_env;
-	struct termios termios;
-	t_pipex		*pipex;
-	t_garbage	*garbage;
-	t_token		*token;
-	t_queue		*front;
-	t_queue		*rear;
-	t_queue		*exp_front;
-	t_queue		*exp_rear;
-	t_export	*export_list;
+	int				num_pipe;
+	int				term_fd[2];
+	int				num_heredoc;
+	char			*input;
+	char			**my_env;
+	struct termios	termios;
+	t_pipex			*pipex;
+	t_garbage		*garbage;
+	t_token			*token;
+	t_queue			*front;
+	t_queue			*rear;
+	t_queue			*exp_front;
+	t_queue			*exp_rear;
+	t_export		*export_list;
 }	t_shell;
-
-
-void	enqueue(t_shell *shell, t_queue **front, t_queue **rear, void *ptr);
-void	dequeue(t_shell *shell, t_queue **front);
-void	exec_order(t_shell *shell);
-bool	order_heredoc(t_shell *shell);
-void	order_redirections(t_shell *shell, t_token *token);
-bool	is_syntax_error(t_token *token);
 
 #endif

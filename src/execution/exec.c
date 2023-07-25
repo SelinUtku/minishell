@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 02:25:13 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/25 19:04:50 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 21:04:24 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	pipex(t_shell *shell)
 	create_pipelines(pipex, pipex->num_commands - 1);
 	create_child_process(shell, pipex);
 	close_pipes(pipex);
-	my_waitpid(shell, pipex);
+	my_waitpid(pipex);
 }
 
 void	create_pipelines(t_pipex *pipex, int num)
@@ -34,7 +34,7 @@ void	create_pipelines(t_pipex *pipex, int num)
 	pipex->pipeline = (int **)malloc(num * sizeof(int *));
 	if (pipex->pipeline == NULL)
 	{
-		// shell->status = 1;
+		g_exit_status = 1;
 		return (perror("malloc"));
 	}
 	while (++i < num)
@@ -43,13 +43,13 @@ void	create_pipelines(t_pipex *pipex, int num)
 		if (pipex->pipeline[i] == NULL)
 		{
 			free_int_dubleptr(pipex->pipeline, i);
-			// shell->status = 1;
+			g_exit_status = 1;
 			return (perror("malloc"));
 		}
 		if (pipe(pipex->pipeline[i]) == -1)
 		{
 			free_int_dubleptr(pipex->pipeline, num);
-			// shell->status = 1;
+			g_exit_status = 1;
 			return (perror("pipe"));
 		}
 	}
@@ -63,7 +63,7 @@ void	create_child_process(t_shell *shell, t_pipex *pipex)
 	if (pipex->pid == NULL)
 	{
 		free_int_dubleptr(pipex->pipeline, pipex->num_commands - 1);
-		shell->status = 1;
+		g_exit_status = 1;
 		return (perror("malloc"));
 	}
 	i = -1;
@@ -75,7 +75,7 @@ void	create_child_process(t_shell *shell, t_pipex *pipex)
 			perror("Fork");
 			free(pipex->pid);
 			free_int_dubleptr(pipex->pipeline, pipex->num_commands - 1);
-			shell->status = 1;
+			g_exit_status = 1;
 			return (perror("fork"));
 		}
 		exec_child_process(shell, pipex, i);
@@ -92,7 +92,7 @@ void	exec_child_process(t_shell *shell, t_pipex *pipex, int i)
 		signals_child();
 		child = find_right_token(shell, i);
 		pipe_redirections(pipex, i);
-		handle_redirections(shell, pipex, child, 1);
+		handle_redirections(pipex, child, 1);
 		pipex->command = command_pointer(child);
 		if (!pipex->command || !pipex->command[0])
 		{

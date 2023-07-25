@@ -6,13 +6,13 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 19:04:09 by sutku             #+#    #+#             */
-/*   Updated: 2023/07/25 19:04:45 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 21:04:19 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	my_waitpid(t_shell *shell, t_pipex *pipex)
+void	my_waitpid(t_pipex *pipex)
 {
 	int	i;
 	int	status;
@@ -22,7 +22,7 @@ void	my_waitpid(t_shell *shell, t_pipex *pipex)
 		waitpid(pipex->pid[i], &status, 0);
 	free_pipex_all(pipex);
 	if (WIFEXITED(status))
-		shell->status = WEXITSTATUS(status);
+		g_exit_status = WEXITSTATUS(status);
 }
 
 char	**command_pointer(t_token *child)

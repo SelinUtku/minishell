@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/18 03:25:05 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 23:14:31 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 20:46:23 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	exit_code_expand(t_shell *shell, int *i)
 {
 	char	*var;
 
-	var = ft_itoa(shell->status);
+	var = ft_itoa(g_exit_status);
 	enqueue(shell, &shell->exp_front, &shell->exp_rear, \
 	shell_strdup(shell, var));
 	free(var);

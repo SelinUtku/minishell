@@ -6,13 +6,13 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:51 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 21:25:50 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 20:54:07 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_echo(t_shell *shell, char **str)
+void	ft_echo(char **str)
 {
 	int	i;
 	int	new_line;
@@ -33,7 +33,7 @@ void	ft_echo(t_shell *shell, char **str)
 	}
 	if (new_line)
 		ft_putstr_fd("\n", STDOUT_FILENO);
-	shell->status = 0;
+	g_exit_status = 0;
 }
 
 int	check_echo_flag(char *str)
