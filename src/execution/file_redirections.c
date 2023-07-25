@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 04:10:58 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/25 00:09:46 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 19:35:09 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,20 @@ void	output_dup2(int output, t_pipex *pipex, int flag)
 	close(output);
 }
 
-void	my_waitpid(t_shell *shell, t_pipex *pipex)
+int	open_input_file(t_pipex *pipex, char *filename, int flag)
 {
-	int	i;
-	int	status;
+	int	fd;
 
-	i = -1;
-	while (++i < pipex->num_commands)
-		waitpid(pipex->pid[i], &status, 0);
-	free_pipex_all(pipex);
-	if (WIFEXITED(status))
-		shell->status = WEXITSTATUS(status);
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+	{
+		perror("Minishell: input");
+		if (flag == 0)
+			return (-1);
+		free_pipex_all(pipex);
+		exit(EXIT_FAILURE);
+	}
+	return (fd);
 }
 
 int	open_file(t_pipex *pipex, char *filename, int rdir, int flag)
@@ -62,15 +65,9 @@ int	open_file(t_pipex *pipex, char *filename, int rdir, int flag)
 	fd = 0;
 	if (rdir == INPUT_R)
 	{
-		fd = open(filename, O_RDONLY);
-		if (fd < 0)
-		{
-			perror("Minishell: input");
-			if (flag == 0)
-				return (-1);
-			free_pipex_all(pipex);
-			exit(EXIT_FAILURE);
-		}
+		fd = open_input_file(pipex, filename, flag);
+		if (fd == -1)
+			return (-1);
 		return (fd);
 	}
 	else if (rdir == OUTPUT_R_APPEND)

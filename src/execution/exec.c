@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/08 02:25:13 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 23:25:55 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 19:04:50 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,33 +109,4 @@ void	exec_child_process(t_shell *shell, t_pipex *pipex, int i)
 		free_pipex_all(pipex);
 		exit(EXIT_FAILURE);
 	}
-}
-
-char	**command_pointer(t_token *child)
-{
-	t_token	*temp;
-	char	**str;
-	int		i;
-
-	temp = child;
-	i = 0;
-	while (temp && temp->type != PIPE)
-	{
-		if (temp->type == WORD)
-			i++;
-		temp = temp->next;
-	}
-	temp = child;
-	str = malloc((i + 1) * sizeof(char *));
-	i = 0;
-	while (temp && temp->type != PIPE)
-	{
-		if (temp->type == WORD)
-		{
-			str[i] = temp->str;
-			i++;
-		}
-		temp = temp->next;
-	}
-	return (str[i] = NULL, str);
 }

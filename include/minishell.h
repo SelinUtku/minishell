@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 17:36:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 23:46:50 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 19:18:49 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	add_token_next(t_shell *shell, t_token *token, t_type type, char *str);
 char	*merge_queue(t_shell *shell);
 //main
 int		get_input(char **env);
+void	exec_choice(t_shell *shell);
+void	get_input_from_prompt(t_shell *shell);
 
 // expansion
 void	is_expandable(t_shell *shell);
@@ -163,16 +165,21 @@ char	**command_pointer(t_token *child);
 int		is_builtin(char *str);
 void	which_builtin(t_shell *shell, char **str);
 void	exec_builtin(t_shell *shell, char **str, t_pipex *pipex);
-void	handle_redirections(t_shell *shell, t_pipex *pipex, \
+
+//exec do file redirections
+bool	handle_redirections(t_shell *shell, t_pipex *pipex, \
 t_token *token, int flag);
+bool	do_redirections(t_pipex *pipex, t_token *child, int flag);
 void	pipe_redirections(t_pipex *pipex, int i);
 bool	check_ambiguous_redirect(t_shell *shell, t_pipex *pipex, \
 t_token *child, int flag);
+
 void	initialize_pipex(t_pipex *pipex);
 int		pipe_counter(t_shell *shell);
 t_token	*find_right_token(t_shell *shell, int num_pipe);
 void	my_waitpid(t_shell *shell, t_pipex *pipex);
 int		open_file(t_pipex *pipex, char *filename, int rdir, int flag);
+int		open_input_file(t_pipex *pipex, char *filename, int flag);
 void	error_permission(t_pipex *pipex);
 void	is_directory(t_pipex *pipex);
 

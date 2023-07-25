@@ -6,13 +6,11 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/25 00:13:11 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 19:30:47 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-void	exec_choice(t_shell *shell);
 
 int	check_syntax_error(t_shell *shell)
 {
@@ -41,6 +39,7 @@ int	main(int argc, char **argv, char **env)
 	}
 	return (0);
 }
+
 void	init_shell_struct(t_shell *shell)
 {
 	shell->token = NULL;
@@ -49,6 +48,7 @@ void	init_shell_struct(t_shell *shell)
 	shell->exp_front = NULL;
 	shell->exp_rear = NULL;
 }
+
 
 int	get_input(char **env)
 {
@@ -101,6 +101,7 @@ int	get_input(char **env)
 void	exec_choice(t_shell *shell)
 {
 	char	**str;
+	bool	flag;
 
 	if (shell->num_pipe == 0)
 	{
@@ -109,13 +110,14 @@ void	exec_choice(t_shell *shell)
 		{
 			shell->term_fd[0] = dup(STDIN_FILENO);
 			shell->term_fd[1] = dup(STDOUT_FILENO);
-			handle_redirections(shell, NULL, shell->token, 0);
+			flag = handle_redirections(shell, NULL, shell->token, 0);
 			if (is_builtin(*str) == 4)
 			{
 				close(shell->term_fd[0]);
 				close(shell->term_fd[1]);
 			}
-			which_builtin(shell, str);
+			if (flag)
+				which_builtin(shell, str);
 			input_dup2(shell->term_fd[0], NULL, 0);
 			output_dup2(shell->term_fd[1], NULL, 0);
 		}
@@ -126,5 +128,3 @@ void	exec_choice(t_shell *shell)
 	else
 		pipex(shell);
 }
-
-//handle_redirections should may return true or false for echo. < input echo hello (input doesnt exist);

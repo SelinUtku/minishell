@@ -22,7 +22,7 @@ EXEC_SRC	=	src/execution/priority.c \
 				src/execution/exec_builtin.c src/execution/heredoc/heredoc.c \
 				src/signals/signal.c src/execution/heredoc/heredoc_utils.c \
 				src/execution/exec_redirections.c src/execution/exec_utils.c \
-				src/execution/exec_error_messages.c
+				src/execution/exec_error_messages.c src/execution/exec_utils2.c 
 EXEC_OBJ	=	$(EXEC_SRC:.c=.o)
 
 GARBAGE_SRC	=	src/garbage_collector/add_to_garbage.c \

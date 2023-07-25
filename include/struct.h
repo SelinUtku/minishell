@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 03:08:29 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/24 22:47:37 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 19:07:35 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # define NO_CMD			": command not found"
 # define EXIT_NON_NUM	": numeric argument required"
 # define TOO_MNY_ARG	"too many arguments"
+
+int	e_status;
 
 typedef struct s_garbage
 {

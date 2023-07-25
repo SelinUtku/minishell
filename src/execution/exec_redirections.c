@@ -6,41 +6,55 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 23:20:02 by sutku             #+#    #+#             */
-/*   Updated: 2023/07/25 00:01:43 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 18:57:54 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	handle_redirections(t_shell *shell, t_pipex *pipex, \
+bool	do_redirections(t_pipex *pipex, t_token *child, int flag)
+{
+	int	fd;
+
+	if (child->type == INPUT_R)
+	{
+		fd = open_file(pipex, child->next->str, INPUT_R, flag);
+		if (fd == -1)
+			return (false);
+		input_dup2(fd, pipex, flag);
+	}
+	else if (child->type == OUTPUT_R)
+	{
+		fd = open_file(pipex, child->next->str, OUTPUT_R, flag);
+		if (fd == -1)
+			return (false);
+		output_dup2(fd, pipex, flag);
+	}
+	else if (child->type == OUTPUT_R_APPEND)
+	{
+		fd = open_file(pipex, child->next->str, OUTPUT_R_APPEND, flag);
+		if (fd == -1)
+			return (false);
+		output_dup2(fd, pipex, flag);
+	}
+	return (true);
+}
+
+bool	handle_redirections(t_shell *shell, t_pipex *pipex, \
 t_token *token, int flag)
 {
-	int		fd;
 	t_token	*child;
 
 	child = token;
 	while (child && child->type != 6)
 	{
 		if (check_ambiguous_redirect(shell, pipex, child, flag) == true)
-			return ;
-		if (child->type == INPUT_R)
-		{
-			fd = open_file(pipex, child->next->str, INPUT_R, flag);
-			if (fd != -1)
-				input_dup2(fd, pipex, flag);
-		}
-		else if (child->type == OUTPUT_R)
-		{
-			fd = open_file(pipex, child->next->str, OUTPUT_R, flag);
-			output_dup2(fd, pipex, flag);
-		}
-		else if (child->type == OUTPUT_R_APPEND)
-		{
-			fd = open_file(pipex, child->next->str, OUTPUT_R_APPEND, flag);
-			output_dup2(fd, pipex, flag);
-		}
+			return (false);
+		if (do_redirections(pipex, child, flag) == false)
+			return (false);
 		child = child->next;
 	}
+	return (true);
 }
 
 void	pipe_redirections(t_pipex *pipex, int i)
