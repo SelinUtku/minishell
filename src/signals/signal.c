@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/15 03:08:05 by sutku             #+#    #+#             */
-/*   Updated: 2023/07/25 20:27:58 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 23:02:23 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	handle_signal_int(int signum)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		g_exit_status = 1;
 		return ;
 	}
 }

@@ -1,4 +1,14 @@
-
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/07/25 23:22:03 by sutku             #+#    #+#              #
+#    Updated: 2023/07/25 23:22:14 by sutku            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
 DEF_COLOR = \033[0;39m
 RED = \033[0;91m
@@ -10,8 +20,6 @@ CYAN = \033[0;96m
 WHITE = \033[0;97m
 
 .SILENT:
-
-# USER		= $(shell whoami)
 
 MAIN_SRC	=	src/main/main.c src/main/main_utils.c
 MAIN_OBJ	=	$(MAIN_SRC:.c=.o)
@@ -67,7 +75,7 @@ READLINE_LIB	=	-lreadline
 LIBFT		= ./libft
 LIBFT_LIB	= ./libft/libft.a
 
-CC			= cc #-fsanitize=address -g
+CC			= cc
 RM			= rm -f
 CFLAGS		= $(INCL_RDL_HEADER) -Wall -Werror -Wextra
 

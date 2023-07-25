@@ -6,7 +6,7 @@
 /*   By: sutku <sutku@student.42heilbronn.de>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 04:02:59 by Cutku             #+#    #+#             */
-/*   Updated: 2023/07/25 21:20:59 by sutku            ###   ########.fr       */
+/*   Updated: 2023/07/25 23:11:39 by sutku            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	get_input_and_parse(t_shell *shell)
 	if (shell->input == NULL || shell->input[0] == EOF)
 	{
 		clean_garbage(&shell->garbage);
+		ft_putendl_fd("exit", 2);
 		exit(g_exit_status);
 	}
 	add_history(shell->input);
@@ -59,23 +60,7 @@ int	execute_minishell(char **env)
 	{
 		init_shell_struct(shell);
 		signals(shell);
-		// get_input_and_parse(shell);
-		if (isatty(fileno(stdin)))
-			shell->input = readline("MinisHell$ ");
-		else
-		{
-			char *line;
-			line = get_next_line(fileno(stdin));
-			shell->input = ft_strtrim(line, "\n");
-			free(line);
-		}
-		if (shell->input == NULL || shell->input[0] == EOF)
-		{
-			clean_garbage(&shell->garbage);
-			exit(g_exit_status);
-		}
-		add_history(shell->input);
-		parse_the_input(shell);
+		get_input_and_parse(shell);
 		here_doc(shell);
 		shell->num_pipe = pipe_counter(shell);
 		if (check_syntax_error(shell) == 0)
